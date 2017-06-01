@@ -78,15 +78,28 @@ def get_sport_scores(sport):
     matches = []
     for item in items:
         for child in item:
-            if child.tag == 'title':
-                title = child.text
-                index_bracket = title.index(')')
-                title = title[index_bracket + 1:]
-                index_vs = title.index('vs')
-                index_colon = title.index(':')
-                match_info['team1'] = title[0:index_vs].replace('#', ' ').strip()
-                match_info['team2'] = title[index_vs + 2:index_colon].replace('#', ' ').strip()
-                match_info['match_score'] = title[index_colon + 1:].strip()
+            if sport == 'soccer':
+                if child.tag == 'description':
+                    title = child.text
+                    index_bracket = title.index(')')
+                    title = title[index_bracket + 1:]
+                    index_vs = title.index('vs')
+                    index_colon = title.index(':')
+                    index_hyph = title.index('-')
+                    match_info['team1'] = title[0: index_vs].replace('#', ' ').strip()
+                    match_info['team2'] = title[index_vs + 2:index_colon].replace('#', ' ').strip()
+                    match_info['match_score'] = title[index_colon + 1:index_hyph].strip()
+                    match_info['match_time'] = title[index_hyph+1:].strip()
+            else:
+                if child.tag == 'title':
+                    title = child.text
+                    index_bracket = title.index(')')
+                    title = title[index_bracket + 1:]
+                    index_vs = title.index('vs')
+                    index_colon = title.index(':')
+                    match_info['team1'] = title[0:index_vs].replace('#', ' ').strip()
+                    match_info['team2'] = title[index_vs + 2:index_colon].replace('#', ' ').strip()
+                    match_info['match_score'] = title[index_colon + 1:].strip()
 
             if child.tag == 'description':
                 match_info['match_time'] = child.text.strip()
