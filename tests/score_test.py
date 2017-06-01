@@ -18,7 +18,7 @@ class TestHockeyScores(unittest.TestCase):
 
     def test_date(self):
         date = 'Thu, 1 Jun 2017 03:10:14 GMT'
-        self.assertEqual(self.match1.game_date, date)
+        self.assertEqual(self.match1.match_date, date)
 
 
 if __name__ == '__main__':
