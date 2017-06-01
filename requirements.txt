@@ -3,4 +3,5 @@ chardet==3.0.3
 ElementTreeFactory==1.0
 idna==2.5
 requests==2.17.3
+sports.py==1.0.2
 urllib3==1.21.1
