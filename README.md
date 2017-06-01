@@ -47,6 +47,6 @@ This returns a list of Match objects which contain the same properties described
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request
 ## History
-*June 1st, 2017:* version 1.0.2 released
+*June 1st, 2017:* version 1.0.3 released
 ## Credits
 Evan Sloan: evansloan082@gmail.com
