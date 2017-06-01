@@ -18,6 +18,12 @@ class Match:
 
 
 def __load_xml(sport):
+    """
+    Parse XML file containing match details using ElementTree
+    :param sport: sport being played
+    :type sport: string
+    :return: ElementTree object containing data from XML file
+    """
     try:
         url = 'http://www.scorespro.com/rss2/live-{}.xml'.format(sport)
         r = requests.get(url)
@@ -28,6 +34,16 @@ def __load_xml(sport):
 
 
 def get_match_score(sport, team1, team2):
+    """
+    Get live scores for a single match
+    :param sport: the sport being played
+    :param team1: first team participating in the match
+    :param team2: second team participating in the match
+    :type sport: string
+    :type team1: string
+    :type team2: string
+    :return: Match object
+    """
     sport = sport.lower()
     team1 = team1.replace('_', ' ')
     team2 = team2.replace('_', ' ')
@@ -43,6 +59,12 @@ def get_match_score(sport, team1, team2):
 
 
 def get_sport_scores(sport):
+    """
+    Get live scores for all matches in a particular sport
+    :param sport: the sport being played
+    :type sport: string
+    :return: List containing Match objects
+    """
     sport = sport.lower()
     root = __load_xml(sport)
 

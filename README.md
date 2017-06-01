@@ -1,3 +1,7 @@
+[![PyPI](https://img.shields.io/pypi/v/sports.py.svg)](https://pypi.python.org/pypi/sports.py/1.0.2)
+[![License](https://img.shields.io/github/license/evansloan082/sports.py.svg)](https://github.com/evansloan082/sports.py/blob/master/LICENSE)
+
+
 # sports.py
 Gather live up-to-date sports scores. Baseball, basketball, football, hockey, and tennis currently functional
 ## Installation
