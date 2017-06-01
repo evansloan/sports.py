@@ -4,7 +4,7 @@
 
 
 # sports.py
-Gather live up-to-date sports scores. Baseball, basketball, football, hockey, and tennis currently functional
+Gather live up-to-date sports scores. Baseball, basketball, football, hockey, soccer, and tennis currently functional
 ## Installation
 Requires Python >= 3.5
 
