@@ -3,22 +3,41 @@ import unittest
 from sports_py import scores
 
 
-class TestHockeyScores(unittest.TestCase):
-    match1 = scores.get_match_score('hockey', 'penguins', 'predators')
-    match2 = scores.get_match_score('hockey', 'pittsburgh', 'nashville')
+class TestScores(unittest.TestCase):
+    matches = scores.get_sport_scores('baseball')
+    match = scores.get_match_score('baseball', matches[0].team1, matches[0].team2)
+    team1 = match.team1
+    team2 = match.team2
+    score = match.score
+    date = match.match_date
 
     def test_teams(self):
-        self.assertEqual(self.match1.team1, 'Pittsburgh Penguins')
-        self.assertEqual(self.match1.team2, 'Nashville Predators')
-        self.assertEqual(self.match2.team1, 'Pittsburgh Penguins')
-        self.assertEqual(self.match2.team2, 'Nashville Predators')
+        if self.team1 and self.team2 is not None:
+            test = True
+        else:
+            test = False
+        self.assertEqual(test, True)
 
     def test_score(self):
-        self.assertEqual(self.match1.score, '4-1')
+        if self.score is not None:
+            test = True
+        else:
+            test = False
+        self.assertEqual(test, True)
 
     def test_date(self):
-        date = 'Thu, 1 Jun 2017 03:10:14 GMT'
-        self.assertEqual(self.match1.match_date, date)
+        if self.date is not None:
+            test = True
+        else:
+            test = False
+        self.assertEqual(test, True)
+
+    def test_sport(self):
+        if self.matches is not None:
+            test = True
+        else:
+            test = False
+        self.assertEqual(test, True)
 
 
 if __name__ == '__main__':
