@@ -5,19 +5,10 @@ from xml.etree.ElementTree import ParseError
 import requests
 
 from sports_py.errors import SportError, TeamError
+from sports_py.match import Match
 
 
-class Match:
-    def __init__(self, team1, team2, score, match_time, match_date, match_link):
-        self.team1 = team1
-        self.team2 = team2
-        self.score = score
-        self.match_time = match_time
-        self.match_date = match_date
-        self.match_link = match_link
-
-
-def __load_xml(sport):
+def _load_xml(sport):
     """
     Parse XML file containing match details using ElementTree
     :param sport: sport being played
@@ -33,31 +24,6 @@ def __load_xml(sport):
         raise SportError(sport)
 
 
-def get_match_score(sport, team1, team2):
-    """
-    Get live scores for a single match
-    :param sport: the sport being played
-    :param team1: first team participating in the match
-    :param team2: second team participating in the match
-    :type sport: string
-    :type team1: string
-    :type team2: string
-    :return: Match object
-    """
-    sport = sport.lower()
-    team1 = team1.replace('_', ' ')
-    team2 = team2.replace('_', ' ')
-    team1_pattern = re.compile(team1, re.IGNORECASE)
-    team2_pattern = re.compile(team2, re.IGNORECASE)
-
-    matches = get_sport_scores(sport)
-    for match in matches:
-        if re.search(team1_pattern, match.team1) and re.search(team2_pattern, match.team2):
-            return match
-    else:
-        raise TeamError(sport, team1, team2)
-
-
 def get_sport_scores(sport):
     """
     Get live scores for all matches in a particular sport
@@ -66,7 +32,7 @@ def get_sport_scores(sport):
     :return: List containing Match objects
     """
     sport = sport.lower()
-    root = __load_xml(sport)
+    root = _load_xml(sport)
 
     items = []
     for child in root:
@@ -82,24 +48,24 @@ def get_sport_scores(sport):
                 if child.tag == 'description':
                     title = child.text
                     index_bracket = title.index(')')
-                    title = title[index_bracket + 1:]
+                    title = title[index_bracket+1:]
                     index_vs = title.index('vs')
                     index_colon = title.index(':')
                     index_hyph = title.index('-')
-                    match_info['team1'] = title[0: index_vs].replace('#', ' ').strip()
-                    match_info['team2'] = title[index_vs + 2:index_colon].replace('#', ' ').strip()
+                    match_info['team1'] = title[0:index_vs].replace('#', ' ').strip()
+                    match_info['team2'] = title[index_vs+2:index_colon].replace('#', ' ').strip()
                     match_info['match_score'] = title[index_colon + 1:index_hyph].strip()
                     match_info['match_time'] = title[index_hyph+1:].strip()
             else:
                 if child.tag == 'title':
                     title = child.text
                     index_bracket = title.index(')')
-                    title = title[index_bracket + 1:]
+                    title = title[index_bracket+1:]
                     index_vs = title.index('vs')
                     index_colon = title.index(':')
                     match_info['team1'] = title[0:index_vs].replace('#', ' ').strip()
-                    match_info['team2'] = title[index_vs + 2:index_colon].replace('#', ' ').strip()
-                    match_info['match_score'] = title[index_colon + 1:].strip()
+                    match_info['team2'] = title[index_vs+2:index_colon].replace('#', ' ').strip()
+                    match_info['match_score'] = title[index_colon+1:].strip()
 
             if child.tag == 'description':
                 match_info['match_time'] = child.text.strip()
@@ -112,3 +78,26 @@ def get_sport_scores(sport):
                              match_info['match_time'], match_info['match_date'], match_info['match_link']))
 
     return matches
+
+
+def get_match_score(sport, team1, team2):
+    """
+    Get live scores for a single match
+    :param sport: the sport being played
+    :param team1: first team participating in the match
+    :param team2: second team participating in the match
+    :type sport: string
+    :type team1: string
+    :type team2: string
+    :return: Match object
+    """
+    sport = sport.lower()
+    team1_pattern = re.compile(team1, re.IGNORECASE)
+    team2_pattern = re.compile(team2, re.IGNORECASE)
+
+    matches = get_sport_scores(sport)
+    for match in matches:
+        if re.search(team1_pattern, match.team1) and re.search(team2_pattern, match.team2):
+            return match
+    else:
+        raise TeamError(sport, team1, team2)

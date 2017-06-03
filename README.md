@@ -4,11 +4,13 @@
 
 
 # sports.py
-Gather live up-to-date sports scores. Baseball, basketball, football, hockey, soccer, and tennis currently functional
+Gather live up-to-date sports scores. Baseball, basketball, cricket, football, handball, hockey, rugby, soccer, tennis, and volleyball currently functional
+
 ## Installation
 Requires Python 2.7 or Python >= 3.5
 
 `pip install sports_py`
+
 ## Usage
 
 sports.py uses two simple functions to get the scores that you want.
@@ -17,6 +19,7 @@ sports.py uses two simple functions to get the scores that you want.
 
 ```python
 from sports_py import scores
+ 
 match = scores.get_match_score('tennis', 'Murray', 'Federer')
 print(match.score)
 ```
@@ -32,12 +35,39 @@ This returns a single Match object which contains the following properties:
 **Get multiple matches**
 ```python
 from sports_py import scores
+ 
 matches = scores.get_sport_scores('basketball')
 for match in matches:
     print('{0} vs {1}: {2}'.format(match.team1, match.team2, match.score))
 ```
-
 This returns a list of Match objects which contain the same properties described above
+
+List of valid sports:
+- Baseball: `baseball`
+- Basketball: `basketball`
+- Cricket: `cricket`
+- Football: `football`
+- Handball: `handball`
+- Hockey: `hockey`
+- Rugby: `rugby-union` or `rugby-league`
+- Soccer: `soccer`
+- Tennis: `tennis`
+- Volleyball: `volleyball`
+
+**Convert Match objects to JSON**
+```python
+import json
+from sports_py import scores
+ 
+matches = scores.get_sport_scores('hockey')
+for match in matches:
+    json_data = json.loads(match.to_json())
+    print(json_data)
+    
+pens_game = json.loads(scores.get_match_score('hockey', 'panguins', 'predators').to_json())
+print(pens_game)
+```
+
 
 ## Contributing
 1. Fork it!
@@ -45,7 +75,9 @@ This returns a list of Match objects which contain the same properties described
 3. Commit your changes: `git commit -am 'Add some feature'`
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request
+
 ## History
 *June 1st, 2017:* version 1.0.3 released
+
 ## Credits
 Evan Sloan: evansloan082@gmail.com
