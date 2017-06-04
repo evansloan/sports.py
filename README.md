@@ -39,7 +39,8 @@ from sports_py import scores
  
 matches = scores.get_sport_scores('basketball')
 for match in matches:
-    print('{0} vs {1}: {2}'.format(match.team1, match.team2, match.score))
+    print('{0} vs {1}: {2}-{3}'.format(match.home_team, match.away_team,
+                                       match.home_score, match.away_score))
 ```
 This returns a list of Match objects which contain the same properties described above
 
