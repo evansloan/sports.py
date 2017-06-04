@@ -25,6 +25,7 @@ print(match.score)
 ```
 
 This returns a single Match object which contains the following properties:
+- sport: Sport of the match
 - home_team: Home team
 - away_team: Away team
 - home_score: Home team score

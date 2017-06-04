@@ -2,8 +2,9 @@ import json
 
 
 class Match:
-    def __init__(self, team1, team2, score, match_time, match_date, match_link):
+    def __init__(self, sport, team1, team2, score, match_time, match_date, match_link):
         score = score.split('-')
+        self.sport = sport
         self.home_team = team1
         self.away_team = team2
         self.home_score = score[0]
@@ -19,6 +20,7 @@ class Match:
         """
         data = {
             'match': {
+                'sport': self.sport,
                 'home_team': self.home_team,
                 'away_team': self.away_team,
                 'home_score': self.home_score,

@@ -54,7 +54,7 @@ def get_sport_scores(sport):
                     index_hyph = title.index('-')
                     match_info['team1'] = title[0:index_vs].replace('#', ' ').strip()
                     match_info['team2'] = title[index_vs+2:index_colon].replace('#', ' ').strip()
-                    match_info['match_score'] = title[index_colon + 1:index_hyph].strip()
+                    match_info['match_score'] = title[index_colon+1:index_hyph+2].strip()
                     match_info['match_time'] = title[index_hyph+1:].strip()
             else:
                 if child.tag == 'title':
@@ -74,7 +74,7 @@ def get_sport_scores(sport):
             if child.tag == 'guid':
                 match_info['match_link'] = child.text.strip()
 
-        matches.append(Match(match_info['team1'], match_info['team2'], match_info['match_score'],
+        matches.append(Match(sport, match_info['team1'], match_info['team2'], match_info['match_score'],
                              match_info['match_time'], match_info['match_date'], match_info['match_link']))
 
     return matches
