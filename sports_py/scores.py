@@ -4,7 +4,7 @@ from xml.etree.ElementTree import ParseError
 
 import requests
 
-from sports_py.errors import SportError, TeamError
+from sports_py.errors import MatchError, SportError
 from sports_py.match import Match
 
 
@@ -80,7 +80,7 @@ def get_sport_scores(sport):
     return matches
 
 
-def get_match_score(sport, team1, team2):
+def get_match_score(sport, home_team, away_team):
     """
     Get live scores for a single match
     :param sport: the sport being played
@@ -92,12 +92,13 @@ def get_match_score(sport, team1, team2):
     :return: Match object
     """
     sport = sport.lower()
-    team1_pattern = re.compile(team1, re.IGNORECASE)
-    team2_pattern = re.compile(team2, re.IGNORECASE)
+    team1_pattern = re.compile(home_team, re.IGNORECASE)
+    team2_pattern = re.compile(away_team, re.IGNORECASE)
 
     matches = get_sport_scores(sport)
     for match in matches:
-        if re.search(team1_pattern, match.team1) and re.search(team2_pattern, match.team2):
+        if re.search(team1_pattern, match.home_team) or re.search(team1_pattern, match.away_team) \
+                and re.search(team2_pattern, match.away_team) or re.search(team2_pattern, match.home_team):
             return match
-    else:
-        raise TeamError(sport, team1, team2)
+        else:
+            raise MatchError(sport, home_team, away_team)

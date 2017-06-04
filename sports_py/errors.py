@@ -1,4 +1,4 @@
-class TeamError(Exception):
+class MatchError(Exception):
     def __init__(self, sport, team1, team2):
         self.sport = sport
         self.team1 = team1

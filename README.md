@@ -25,9 +25,10 @@ print(match.score)
 ```
 
 This returns a single Match object which contains the following properties:
-- team1: Home team
-- team2: Away team
-- score: The score of the match
+- home_team: Home team
+- away_team: Away team
+- home_score: Home team score
+- away_score: Away team score
 - match_time: Current match time
 - match_date: The date of the match
 - match_link: Link to an XML file containing match data

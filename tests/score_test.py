@@ -6,10 +6,11 @@ from sports_py import scores
 
 class TestScores(unittest.TestCase):
     matches = scores.get_sport_scores('baseball')
-    match = scores.get_match_score('baseball', matches[0].team1, matches[0].team2)
-    team1 = match.team1
-    team2 = match.team2
-    score = match.score
+    match = scores.get_match_score('baseball', matches[0].home_team, matches[0].away_team)
+    team1 = match.home_team
+    team2 = match.away_team
+    home_score = match.home_score
+    away_score = match.away_score
     date = match.match_date
     test = False
 
@@ -24,7 +25,7 @@ class TestScores(unittest.TestCase):
         self.assertEqual(self.test, True)
 
     def test_score(self):
-        if self.score is not None:
+        if self.home_score is not None and self.away_score is not None:
             self.test = True
         self.assertEqual(self.test, True)
 
