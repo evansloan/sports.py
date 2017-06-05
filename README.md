@@ -26,6 +26,7 @@ print(match.score)
 
 This returns a single Match object which contains the following properties:
 - sport: Sport of the match
+- league: League of the match
 - home_team: Home team
 - away_team: Away team
 - home_score: Home team score
@@ -70,17 +71,6 @@ for match in matches:
 pens_game = json.loads(scores.get_match_score('hockey', 'panguins', 'predators').to_json())
 print(pens_game)
 ```
-
-
-## Contributing
-1. Fork it!
-2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request
-
-## History
-*June 1st, 2017:* version 1.0.3 released
 
 ## Credits
 Evan Sloan: evansloan082@gmail.com
