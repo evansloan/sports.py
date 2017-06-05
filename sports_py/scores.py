@@ -40,15 +40,19 @@ def get_sport_scores(sport):
             if c.tag == 'item':
                 items.append(c)
 
-    match_info = dict.fromkeys(['team1', 'team2', 'match_score', 'match_time', 'match_date', 'match_link'], '')
+    match_info = dict.fromkeys(['league', 'team1', 'team2', 'match_score',
+                                'match_time', 'match_date', 'match_link'], '')
+
     matches = []
     for item in items:
         for child in item:
             if sport == 'soccer':
                 if child.tag == 'description':
                     title = child.text
-                    index_bracket = title.index(')')
-                    title = title[index_bracket+1:]
+                    index_open = title.index('(')
+                    index_close = title.index(')')
+                    match_info['league'] = title[index_open+1:index_close].strip()
+                    title = title[index_close+1:]
                     index_vs = title.index('vs')
                     index_colon = title.index(':')
                     index_hyph = title.index('-')
@@ -59,8 +63,10 @@ def get_sport_scores(sport):
             else:
                 if child.tag == 'title':
                     title = child.text
-                    index_bracket = title.index(')')
-                    title = title[index_bracket+1:]
+                    index_open = title.index('(')
+                    index_close = title.index(')')
+                    match_info['league'] = title[index_open+1:index_close].strip()
+                    title = title[index_close+1:]
                     index_vs = title.index('vs')
                     index_colon = title.index(':')
                     match_info['team1'] = title[0:index_vs].replace('#', ' ').strip()
@@ -74,8 +80,9 @@ def get_sport_scores(sport):
             if child.tag == 'guid':
                 match_info['match_link'] = child.text.strip()
 
-        matches.append(Match(sport, match_info['team1'], match_info['team2'], match_info['match_score'],
-                             match_info['match_time'], match_info['match_date'], match_info['match_link']))
+        matches.append(Match(sport, match_info['league'], match_info['team1'], match_info['team2'],
+                             match_info['match_score'], match_info['match_time'], match_info['match_date'],
+                             match_info['match_link']))
 
     return matches
 
