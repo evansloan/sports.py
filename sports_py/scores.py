@@ -55,10 +55,11 @@ def get_sport_scores(sport):
                     title = title[index_close+1:]
                     index_vs = title.index('vs')
                     index_colon = title.index(':')
-                    index_hyph = title.index('-')
                     match_info['team1'] = title[0:index_vs].replace('#', ' ').strip()
                     match_info['team2'] = title[index_vs+2:index_colon].replace('#', ' ').strip()
-                    match_info['match_score'] = title[index_colon+1:index_hyph+2].strip()
+                    title = title[index_colon:]
+                    index_hyph = title.index('-')
+                    match_info['match_score'] = title[1:index_hyph+2].strip()
                     match_info['match_time'] = title[index_hyph+1:].strip()
             else:
                 if child.tag == 'title':
@@ -87,7 +88,7 @@ def get_sport_scores(sport):
     return matches
 
 
-def get_match_score(sport, home_team, away_team):
+def get_match_score(sport, team1, team2):
     """
     Get live scores for a single match
     :param sport: the sport being played
@@ -99,8 +100,8 @@ def get_match_score(sport, home_team, away_team):
     :return: Match object
     """
     sport = sport.lower()
-    team1_pattern = re.compile(home_team, re.IGNORECASE)
-    team2_pattern = re.compile(away_team, re.IGNORECASE)
+    team1_pattern = re.compile(team1, re.IGNORECASE)
+    team2_pattern = re.compile(team2, re.IGNORECASE)
 
     matches = get_sport_scores(sport)
     for match in matches:
@@ -108,4 +109,15 @@ def get_match_score(sport, home_team, away_team):
                 and re.search(team2_pattern, match.away_team) or re.search(team2_pattern, match.home_team):
             return match
         else:
-            raise MatchError(sport, home_team, away_team)
+            raise MatchError(sport, team1, team2)
+
+
+def get_all_matches():
+    sports = ['baseball', 'basketball', 'hockey', 'football', 'rugby-union',
+              'rugby-league','tennis', 'soccer', 'handball', 'volleyball']
+
+    all_matches = []
+    for sport in sports:
+        all_matches.append(get_sport_scores(sport))
+
+    return all_matches

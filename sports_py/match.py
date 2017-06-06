@@ -12,7 +12,7 @@ class Match:
         self.home_score = score[0]
         self.away_score = score[1]
         self.match_time = match_time
-        self.match_date = datetime.strptime(match_date, '%a, %w %b %Y %I:%M:%S %Z')
+        self.match_date = datetime.strptime(match_date, '%a, %w %b %Y %H:%M:%S %Z')
         self.match_link = match_link
 
     def to_json(self):
@@ -28,7 +28,6 @@ class Match:
                 'home_score': self.home_score,
                 'away_score': self.away_score,
                 'time': self.match_time,
-                'date': self.match_date,
                 'link': self.match_link
             }
         }

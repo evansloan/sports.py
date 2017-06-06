@@ -25,15 +25,15 @@ print(match.score)
 ```
 
 This returns a single Match object which contains the following properties:
-- sport: Sport of the match
-- league: League of the match
-- home_team: Home team
-- away_team: Away team
-- home_score: Home team score
-- away_score: Away team score
-- match_time: Current match time
-- match_date: The date of the match
-- match_link: Link to an XML file containing match data
+- `sport`: Sport of the match
+- `league`: League of the match
+- `home_team`: Home team
+- `away_team`: Away team
+- `home_score`: Home team score
+- `away_score`: Away team score
+- `match_time`: Current match time
+- `match_date`: datetime object containing match date info
+- `match_link`: Link to an XML file containing match data
 
 **Get multiple matches**
 ```python
@@ -45,6 +45,17 @@ for match in matches:
                                        match.home_score, match.away_score))
 ```
 This returns a list of Match objects which contain the same properties described above
+
+**Get all live matches**
+```python
+from sports_py import scores
+ 
+all_matches = scores.get_all_matches()
+for sport in all_matches:
+    for match in sport:
+            print('{0} vs {1}: {2}-{3}'.format(match.home_team, match.away_team,
+                                               match.home_score, match.away_score))
+```
 
 List of valid sports:
 - Baseball: `baseball`
