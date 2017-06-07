@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='sports.py',
     packages=['sports_py'],
-    version='1.1.3',
+    version='1.1.4',
     description='A simple Python package to gather live sports scores',
     author='Evan Sloan',
     author_email='evansloan082@gmail.com',
