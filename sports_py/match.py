@@ -1,4 +1,5 @@
 import json
+import uuid
 
 
 class Match:
@@ -13,6 +14,7 @@ class Match:
         self.match_time = match_time
         self.match_date = match_date
         self.match_link = match_link
+        self.uuid = str(uuid.uuid4().hex)
 
     def to_json(self):
         """
