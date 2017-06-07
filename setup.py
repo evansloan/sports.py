@@ -8,7 +8,7 @@ setup(
     author='Evan Sloan',
     author_email='evansloan082@gmail.com',
     url='https://github.com/evansloan082/sports.py',
-    download_url='https://github.com/evansloan082/sports.py/archive/v1.1.3.tar.gz',
+    download_url='https://github.com/evansloan082/sports.py/archive/v1.1.4.tar.gz',
     keywords=['sports', 'scores', 'live scores', 'hockey', 'basketball', 'baseball', 'football'],
     classifiers=[],
     install_requires=['requests'],
