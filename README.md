@@ -32,7 +32,7 @@ This returns a single Match object which contains the following properties:
 - `home_score`: Home team score
 - `away_score`: Away team score
 - `match_time`: Current match time
-- `match_date`: Date the match was played
+- `match_date`: datetime object: date the match was played
 - `match_link`: Link to an XML file containing match data
 
 **Get multiple matches**

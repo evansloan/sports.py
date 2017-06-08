@@ -1,5 +1,6 @@
 import json
 import uuid
+from datetime import datetime
 
 
 class Match:
@@ -12,7 +13,7 @@ class Match:
         self.home_score = score[0]
         self.away_score = score[1]
         self.match_time = match_time
-        self.match_date = match_date
+        self.match_date = datetime.strptime(match_date, '%a, %d %b %Y %H:%M:%S %Z')
         self.match_link = match_link
         self.uuid = str(uuid.uuid4().hex)
 

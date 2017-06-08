@@ -60,6 +60,8 @@ def get_sport_scores(sport):
                     title = title[index_colon:]
                     index_hyph = title.index('-')
                     match_info['match_score'] = title[1:index_hyph+2].strip()
+                    title = title[index_hyph+1:]
+                    index_hyph = title.index('-')
                     match_info['match_time'] = title[index_hyph+1:].strip()
             else:
                 if child.tag == 'title':
@@ -74,8 +76,9 @@ def get_sport_scores(sport):
                     match_info['team2'] = title[index_vs+2:index_colon].replace('#', ' ').strip()
                     match_info['match_score'] = title[index_colon+1:].strip()
 
-            if child.tag == 'description':
-                match_info['match_time'] = child.text.strip()
+                if child.tag == 'description':
+                    match_info['match_time'] = child.text.strip()
+
             if child.tag == 'pubDate':
                 match_info['match_date'] = child.text.strip()
             if child.tag == 'guid':
@@ -108,8 +111,8 @@ def get_match_score(sport, team1, team2):
         if re.search(team1_pattern, match.home_team) or re.search(team1_pattern, match.away_team) \
                 and re.search(team2_pattern, match.away_team) or re.search(team2_pattern, match.home_team):
             return match
-        else:
-            raise MatchError(sport, team1, team2)
+    else:
+        raise MatchError(sport, team1, team2)
 
 
 def get_all_matches():
