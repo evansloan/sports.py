@@ -11,5 +11,5 @@ setup(
     download_url='https://github.com/evansloan082/sports.py/archive/v1.2.tar.gz',
     keywords=['sports', 'scores', 'live scores', 'hockey', 'basketball', 'baseball', 'football'],
     classifiers=[],
-    install_requires=['requests'],
+    install_requires=['requests', 'beautifulsoup4'],
 )
