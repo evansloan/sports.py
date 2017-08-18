@@ -9,7 +9,7 @@ Gather live up-to-date sports scores. Baseball, basketball, cricket, football, h
 ## Installation
 Requires Python 2.7 or Python >= 3.5
 
-`pip install sports_py`
+`pip install sports.py`
 
 ## Usage
 
