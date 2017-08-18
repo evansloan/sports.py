@@ -1,12 +1,12 @@
 import json
 import unittest
 
-from sports_py import scores
+import sports_py
 
 
 class TestScores(unittest.TestCase):
-    matches = scores.get_sport_scores('baseball')
-    match = scores.get_match_score('baseball', matches[0].home_team, matches[0].away_team)
+    matches = sports_py.get_sport_scores('baseball')
+    match = sports_py.get_match_score('baseball', matches[0].home_team, matches[0].away_team)
     team1 = match.home_team
     team2 = match.away_team
     home_score = match.home_score
