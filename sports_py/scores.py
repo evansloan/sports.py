@@ -4,8 +4,7 @@ from xml.etree.ElementTree import ParseError
 
 import requests
 
-from sports_py.errors import MatchError, SportError
-from sports_py.match import Match
+from sports_py import errors, models
 
 
 def _load_xml(sport):
@@ -21,7 +20,7 @@ def _load_xml(sport):
         root = ET.fromstring(r.content)
         return root
     except ParseError:
-        raise SportError(sport)
+        raise errors.SportError(sport)
 
 
 def get_sport_scores(sport):
@@ -40,8 +39,7 @@ def get_sport_scores(sport):
             if c.tag == 'item':
                 items.append(c)
 
-    match_info = dict.fromkeys(['league', 'team1', 'team2', 'match_score',
-                                'match_time', 'match_date', 'match_link'], '')
+    match_info = {}
 
     matches = []
     for item in items:
@@ -55,8 +53,8 @@ def get_sport_scores(sport):
                     title = title[index_close+1:]
                     index_vs = title.index('vs')
                     index_colon = title.index(':')
-                    match_info['team1'] = title[0:index_vs].replace('#', ' ').strip()
-                    match_info['team2'] = title[index_vs+2:index_colon].replace('#', ' ').strip()
+                    match_info['home_team'] = title[0:index_vs].replace('#', ' ').strip()
+                    match_info['away_team'] = title[index_vs+2:index_colon].replace('#', ' ').strip()
                     title = title[index_colon:]
                     index_hyph = title.index('-')
                     match_info['match_score'] = title[1:index_hyph+2].strip()
@@ -72,8 +70,8 @@ def get_sport_scores(sport):
                     title = title[index_close+1:]
                     index_vs = title.index('vs')
                     index_colon = title.index(':')
-                    match_info['team1'] = title[0:index_vs].replace('#', ' ').strip()
-                    match_info['team2'] = title[index_vs+2:index_colon].replace('#', ' ').strip()
+                    match_info['home_team'] = title[0:index_vs].replace('#', ' ').strip()
+                    match_info['away_team'] = title[index_vs+2:index_colon].replace('#', ' ').strip()
                     match_info['match_score'] = title[index_colon+1:].strip()
 
                 if child.tag == 'description':
@@ -84,9 +82,7 @@ def get_sport_scores(sport):
             if child.tag == 'guid':
                 match_info['match_link'] = child.text.strip()
 
-        matches.append(Match(sport, match_info['league'], match_info['team1'], match_info['team2'],
-                             match_info['match_score'], match_info['match_time'], match_info['match_date'],
-                             match_info['match_link']))
+        matches.append(models.Match(sport, match_info))
 
     return matches
 
@@ -111,13 +107,18 @@ def get_match_score(sport, team1, team2):
         if re.search(team1_pattern, match.home_team) or re.search(team1_pattern, match.away_team) \
                 and re.search(team2_pattern, match.away_team) or re.search(team2_pattern, match.home_team):
             return match
-    else:
-        raise MatchError(sport, team1, team2)
+
+    raise errors.MatchError(sport, [team1, team2])
 
 
 def get_all_matches():
+    """
+    Get a list of lists containing all live matches.
+    Each sport is contained within its own list
+    :return: List containing lists of match objects
+    """
     sports = ['baseball', 'basketball', 'hockey', 'football', 'rugby-union',
-              'rugby-league','tennis', 'soccer', 'handball', 'volleyball']
+              'rugby-league', 'tennis', 'soccer', 'handball', 'volleyball']
 
     all_matches = []
     for sport in sports:

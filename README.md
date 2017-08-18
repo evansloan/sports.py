@@ -13,15 +13,31 @@ Requires Python 2.7 or Python >= 3.5
 
 ## Usage
 
-sports.py uses two simple functions to get the scores that you want.
+List of valid sports:
+- Baseball: `baseball`
+- Basketball: `basketball`
+- Cricket: `cricket`
+- Football: `football`
+- Handball: `handball`
+- Hockey: `hockey`
+- Rugby: `rugby-union` or `rugby-league`
+- Soccer: `soccer`
+- Tennis: `tennis`
+- Volleyball: `volleyball`
  
 **Get a single match**
 
+`get_match_score()` takes three parameters:
+
+- `sport`: Name of sport being played (see above for a list of valid sports)
+- `team1`: Name of city of a team in a match (Not case-sensitive)
+- `team2`: Name of city of a team in a match (Not case-sensitive)
+
 ```python
-from sports_py import scores
+import sports_py
  
-match = scores.get_match_score('tennis', 'Murray', 'Federer')
-print(match.score)
+match = sports_py.get_match_score('tennis', 'Murray', 'Federer')
+print('{}-{}'.format(match.home_score, match.away_score))
 ```
 
 This returns a single Match object which contains the following properties:
@@ -36,10 +52,14 @@ This returns a single Match object which contains the following properties:
 - `match_link`: Link to an XML file containing match data
 
 **Get multiple matches**
+
+`get_sport_scores()` takes one parameter:
+- `sport`: Name of sport (see above for list of valid sports)
+
 ```python
-from sports_py import scores
+import sports_py
  
-matches = scores.get_sport_scores('basketball')
+matches = sports_py.get_sport_scores('basketball')
 for match in matches:
     print('{0} vs {1}: {2}-{3}'.format(match.home_team, match.away_team,
                                        match.home_score, match.away_score))
@@ -48,39 +68,74 @@ This returns a list of Match objects which contain the same properties described
 
 **Get all live matches**
 ```python
-from sports_py import scores
+import sports_py
  
-all_matches = scores.get_all_matches()
+all_matches = sports_py.get_all_matches()
 for sport in all_matches:
     for match in sport:
             print('{0} vs {1}: {2}-{3}'.format(match.home_team, match.away_team,
                                                match.home_score, match.away_score))
 ```
 
-List of valid sports:
-- Baseball: `baseball`
-- Basketball: `basketball`
-- Cricket: `cricket`
-- Football: `football`
-- Handball: `handball`
-- Hockey: `hockey`
-- Rugby: `rugby-union` or `rugby-league`
-- Soccer: `soccer`
-- Tennis: `tennis`
-- Volleyball: `volleyball`
-
 **Convert Match objects to JSON**
 ```python
 import json
-from sports_py import scores
+import sports_py
  
-matches = scores.get_sport_scores('hockey')
+matches = sports_py.get_sport_scores('hockey')
 for match in matches:
     json_data = json.loads(match.to_json())
     print(json_data)
     
-pens_game = json.loads(scores.get_match_score('hockey', 'panguins', 'predators').to_json())
+pens_game = json.loads(sports_py.get_match_score('hockey', 'panguins', 'predators').to_json())
 print(pens_game)
+```
+
+
+**Get extra team info**
+
+*Only works with MLB, NFL, and NHL teams*
+
+Get team information including overall record, championships won and more.
+
+`get_team_info()` takes two parameters:
+- `sport`: Sport of the team the find
+- `team`: Name of city or team to find (Not case-sensitive)
+
+Properties available to all valid teams/sports:
+- `name`: Name of the team
+- `seasons`: Total number of seasons played
+- `record`: Overall regular season record
+- `champs`: Number of total championships (Includes pre-merger champs for NFL)
+- `leaders`: Overall team leaders for certain statistical categories
+- `raw`: Dictionary containing all gathered info
+
+Properties available to only MLB teams:
+- `pennants`: Total number of AL/NL championships
+
+Properties available to only NFL teams:
+- `super_bowls`: Total number of Super Bowls
+
+Properties available to only NHL teams:
+- `points`: Total number of regular season points earned
+
+Properties available to both NFL/NHL teams:
+- `playoff_record`: Overall playoff record
+
+Properties available to both MLB/NHL teams:
+- `playoff_app`: Total number of playoff appearances
+
+```python
+import sports_py
+ 
+pirates = sports_py.get_team_info('baseball', 'pirates')
+print(pirates.pennants) 
+ 
+penguins = sports_py.get_team_info('hockey', 'penguins')
+print(penguins.points)
+ 
+steelers = sports_py.get_team_info('football', 'steelers')
+print(steelers.super_bowls)
 ```
 
 ## Credits
