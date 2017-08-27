@@ -2,16 +2,22 @@ import json
 import unittest
 
 import sports_py
+from sports_py.models import Match
 
 
 class TestScores(unittest.TestCase):
+    match_data = {
+        'league': 'NHL',
+        'home_team': 'Pittsburgh Penguins',
+        'away_team': 'Nashville Predators',
+        'match_score': '2-0',
+        'match_date': 'Sat, 19 Aug 2017 02:12:05 GMT',
+        'match_time': 'Game Finished',
+        'match_link': 'test',
+    }
+
+    match = Match('hockey', match_data)
     matches = sports_py.get_sport_scores('baseball')
-    match = sports_py.get_match_score('baseball', matches[0].home_team, matches[0].away_team)
-    team1 = match.home_team
-    team2 = match.away_team
-    home_score = match.home_score
-    away_score = match.away_score
-    date = match.match_date
     test = False
 
     def test_match(self):
@@ -20,24 +26,20 @@ class TestScores(unittest.TestCase):
         self.assertEqual(self.test, True)
 
     def test_teams(self):
-        if self.team1 and self.team2 is not None:
-            self.test = True
-        self.assertEqual(self.test, True)
+        self.assertEqual(self.match.home_team, 'Pittsburgh Penguins')
+        self.assertEqual(self.match.away_team, 'Nashville Predators')
 
     def test_score(self):
-        if self.home_score is not None and self.away_score is not None:
-            self.test = True
-        self.assertEqual(self.test, True)
+        self.assertEqual(self.match.home_score, '2')
+        self.assertEqual(self.match.away_score, '0')
 
     def test_date(self):
-        if self.date is not None:
+        if self.match.match_date is not None:
             self.test = True
         self.assertEqual(self.test, True)
 
     def test_sport(self):
-        if self.matches is not None:
-            self.test = True
-        self.assertEqual(self.test, True)
+        self.assertEqual(self.match.sport, 'hockey')
 
     def test_json(self):
         try:
