@@ -17,8 +17,7 @@ def _load_xml(sport):
     try:
         url = 'http://www.scorespro.com/rss2/live-{}.xml'.format(sport)
         r = requests.get(url)
-        root = ET.fromstring(r.content)
-        return root
+        return ET.fromstring(r.content)
     except ParseError:
         raise errors.SportError(sport)
 
@@ -99,8 +98,8 @@ def get_match_score(sport, team1, team2):
     :return: Match object
     """
     sport = sport.lower()
-    team1_pattern = re.compile(team1, re.IGNORECASE)
-    team2_pattern = re.compile(team2, re.IGNORECASE)
+    team1_pattern = re.compile(team1, re.I)
+    team2_pattern = re.compile(team2, re.I)
 
     matches = get_sport_scores(sport)
     for match in matches:

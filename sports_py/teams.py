@@ -60,7 +60,7 @@ def get_team_info(sport, team):
             'champs': team_info_raw[15].strip(),
             'leaders': ' '.join(team_info_raw[16:18])
         }
-        return models.BaseballTeam(team_info)
+        return models.Team(team_info)
 
     elif sport == 'hockey':
         team_info = {
@@ -77,7 +77,7 @@ def get_team_info(sport, team):
                 ' '.join(team_info_raw[15:17])
             ]
         }
-        return models.HockeyTeam(team_info)
+        return models.Team(team_info)
 
 
 def _get_football_team_info(team_pattern, team):
@@ -87,7 +87,7 @@ def _get_football_team_info(team_pattern, team):
     :param team_pattern: Cpomiled regex pattern of team name/city
     :param team: Name of the team that is being searched for
     :param sport: Sport that is being searched for (always football)
-    :return: FootballTeam object.
+    :return: Team object.
     """
     base_url = 'https://www.pro-football-reference.com/teams/'
     links = SoupStrainer('table', {'id': 'teams_active'})
@@ -105,7 +105,7 @@ def _get_football_team_info(team_pattern, team):
         'leaders': team_info_raw[11:17]
     }
 
-    return models.FootballTeam(team_info)
+    return models.Team(team_info)
 
 
 def _get_team_info_raw(soup, base_url, team_pattern, team, sport):
