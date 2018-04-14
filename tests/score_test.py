@@ -18,12 +18,9 @@ class TestScores(unittest.TestCase):
 
     match = Match('hockey', match_data)
     matches = sports_py.get_sport_scores('baseball')
-    test = False
 
     def test_match(self):
-        if self.match is not None:
-            self.test = True
-        self.assertEqual(self.test, True)
+        self.assertIsNotNone(self.match)
 
     def test_teams(self):
         self.assertEqual(self.match.home_team, 'Pittsburgh Penguins')
@@ -34,9 +31,7 @@ class TestScores(unittest.TestCase):
         self.assertEqual(self.match.away_score, '0')
 
     def test_date(self):
-        if self.match.match_date is not None:
-            self.test = True
-        self.assertEqual(self.test, True)
+        self.assertIsNotNone(self.match.match_date)
 
     def test_sport(self):
         self.assertEqual(self.match.sport, 'hockey')
@@ -50,6 +45,7 @@ class TestScores(unittest.TestCase):
         except ValueError:
             self.test = False
         self.assertEqual(self.test, True)
+
 
 if __name__ == '__main__':
     unittest.main()
