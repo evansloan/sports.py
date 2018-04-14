@@ -24,7 +24,7 @@ List of valid sports:
 - Soccer: `soccer`
 - Tennis: `tennis`
 - Volleyball: `volleyball`
- 
+
 **Get a single match**
 
 `get_match_score()` takes three parameters:
@@ -35,7 +35,7 @@ List of valid sports:
 
 ```python
 import sports_py
- 
+
 match = sports_py.get_match_score('tennis', 'Murray', 'Federer')
 print('{}-{}'.format(match.home_score, match.away_score))
 ```
@@ -58,10 +58,10 @@ This returns a single Match object which contains the following properties:
 
 ```python
 import sports_py
- 
+
 matches = sports_py.get_sport_scores('basketball')
 for match in matches:
-    print('{0} vs {1}: {2}-{3}'.format(match.home_team, match.away_team,
+    print('{} vs {}: {}-{}'.format(match.home_team, match.away_team,
                                        match.home_score, match.away_score))
 ```
 This returns a list of Match objects which contain the same properties described above
@@ -69,28 +69,21 @@ This returns a list of Match objects which contain the same properties described
 **Get all live matches**
 ```python
 import sports_py
- 
+
 all_matches = sports_py.get_all_matches()
 for sport in all_matches:
     for match in sport:
-            print('{0} vs {1}: {2}-{3}'.format(match.home_team, match.away_team,
+            print('{} vs {}: {}-{}'.format(match.home_team, match.away_team,
                                                match.home_score, match.away_score))
 ```
 
 **Convert Match objects to JSON**
 ```python
-import json
 import sports_py
- 
-matches = sports_py.get_sport_scores('hockey')
-for match in matches:
-    json_data = json.loads(match.to_json())
-    print(json_data)
-    
-pens_game = json.loads(sports_py.get_match_score('hockey', 'panguins', 'predators').to_json())
+
+pens_json = sports_py.get_match_score('hockey', 'panguins', 'predators').to_json()
 print(pens_game)
 ```
-
 
 **Get extra team info**
 
@@ -127,13 +120,13 @@ Properties available to both MLB/NHL teams:
 
 ```python
 import sports_py
- 
+
 pirates = sports_py.get_team_info('baseball', 'pirates')
-print(pirates.pennants) 
- 
+print(pirates.pennants)
+
 penguins = sports_py.get_team_info('hockey', 'penguins')
 print(penguins.points)
- 
+
 steelers = sports_py.get_team_info('football', 'steelers')
 print(steelers.super_bowls)
 ```
