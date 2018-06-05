@@ -1,6 +1,6 @@
 [![PyPI](https://img.shields.io/pypi/v/sports.py.svg)](https://pypi.python.org/pypi/sports.py/)
-[![Build Status](https://travis-ci.org/evansloan082/sports.py.svg?branch=master)](https://travis-ci.org/evansloan082/sports.py)
-[![License](https://img.shields.io/github/license/evansloan082/sports.py.svg)](https://github.com/evansloan082/sports.py/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/evansloan/sports.py.svg?branch=master)](https://travis-ci.org/evansloan082/sports.py)
+[![License](https://img.shields.io/github/license/evansloan/sports.py.svg)](https://github.com/evansloan082/sports.py/blob/master/LICENSE)
 
 
 # sports.py
