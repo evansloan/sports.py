@@ -1,15 +1,30 @@
-from distutils.core import setup
+import os
+from setuptools import find_packages, setup
+
+here = os.path.abspath(os.path.dirname(__file__))
+
+with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name='sports.py',
-    packages=['sports_py'],
-    version='1.2',
+    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
+    version='1.2.1',
     description='A simple Python package to gather live sports scores',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+    ],
     author='Evan Sloan',
     author_email='evansloan082@gmail.com',
-    url='https://github.com/evansloan082/sports.py',
-    download_url='https://github.com/evansloan082/sports.py/archive/v1.2.tar.gz',
+    url='https://github.com/evansloan/sports.py',
+    download_url='https://github.com/evansloan/sports.py/archive/v1.2.1.tar.gz',
     keywords=['sports', 'scores', 'live scores', 'hockey', 'basketball', 'baseball', 'football'],
-    classifiers=[],
-    install_requires=['requests', 'beautifulsoup4'],
+    install_requires=['requests', 'bs4'],
+    python_requires='>=3'
 )
