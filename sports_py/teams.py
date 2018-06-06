@@ -54,7 +54,7 @@ def get_team_info(sport, team):
         team_info = {
             'name': team_info_raw[0],
             'record': team_info_raw[9].strip(),
-            'seasons': ' '.join(team_info_raw[5:7]),
+            'seasons': team_info_raw[6:7][0].strip(),
             'playoff_app': team_info_raw[11].strip(),
             'pennants': team_info_raw[13].strip(),
             'champs': team_info_raw[15].strip(),
