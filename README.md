@@ -6,6 +6,12 @@
 # sports.py
 Gather live up-to-date sports scores. Baseball, basketball, cricket, football, handball, hockey, rugby, soccer, tennis, and volleyball currently functional
 
+Scrapes data from:
+- [scorespro.com](https://www.scorespro.com/)
+- [pro-football-reference.com](https://www.pro-football-reference.com/)
+- [baseball-reference.com](https://www.baseball-reference.com/)
+- [hockey-reference.com](https://www.hockey-reference.com/)
+
 ## Installation
 Requires Python 2.7 or Python >= 3.5
 
