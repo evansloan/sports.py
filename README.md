@@ -10,26 +10,31 @@ Scrapes data from:
 - [scorespro.com](https://www.scorespro.com/)
 - [pro-football-reference.com](https://www.pro-football-reference.com/)
 - [baseball-reference.com](https://www.baseball-reference.com/)
+- [basketball-reference.com](https://www.basketball-reference.com/)
 - [hockey-reference.com](https://www.hockey-reference.com/)
 
 ## Installation
-Requires Python 2.7 or Python >= 3.5
+Requires Python >= 3.5
 
 `pip install sports.py`
 
 ## Usage
 
-List of valid sports:
-- Baseball: `baseball`
-- Basketball: `basketball`
-- Cricket: `cricket`
-- Football: `football`
-- Handball: `handball`
-- Hockey: `hockey`
+```python
+import sports
+```
+
+All valid sports are available as constant variables:
+- Baseball: `sports.BASEBALL`
+- Basketball: `sports.BASKETBALL`
+- Cricket: `sports.CRICKET`
+- Football: `sports.FOOTBALL`
+- Handball: `sports.HANDBALL`
+- Hockey: `sports.HOCKEY`
 - Rugby: `rugby-union` or `rugby-league`
-- Soccer: `soccer`
-- Tennis: `tennis`
-- Volleyball: `volleyball`
+- Soccer: `sports.SOCCER`
+- Tennis: `sports.TENNIS`
+- Volleyball: `sports.VOLLEYBALL`
 
 **Get a single match**
 
@@ -40,9 +45,7 @@ List of valid sports:
 - `team2`: Name of city of a team in a match (Not case-sensitive)
 
 ```python
-import sports_py
-
-match = sports_py.get_match_score('tennis', 'Murray', 'Federer')
+match = sports.get_match_score(sports.TENNIS, 'Murray', 'Federer')
 print('{}-{}'.format(match.home_score, match.away_score))
 ```
 

@@ -5,7 +5,7 @@ from datetime import datetime
 
 import requests
 
-from sports_py import errors, models
+from sports import constants, errors
 
 
 class Match:
@@ -74,7 +74,7 @@ def get_sport_scores(sport):
     matches = []
     for item in items:
         for child in item:
-            if sport == 'soccer':
+            if sport == constants.SOCCER:
                 if child.tag == 'description':
                     title = child.text
                     index_open = title.index('(')
