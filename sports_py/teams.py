@@ -3,7 +3,18 @@ import re
 import requests
 from bs4 import BeautifulSoup, SoupStrainer
 
-from sports_py import errors, models
+from sports_py import errors
+
+
+class Team:
+    def __init__(self, info):
+        for key, value in info.items():
+            setattr(self, key, value)
+
+        self.raw = info
+
+    def __str__(self):
+        return 'Name: {}\nAll-time record: {}\nChampionships: {}'.format(self.name, self.record, self.champs)
 
 
 def get_team_info(sport, team):
@@ -60,7 +71,7 @@ def get_team_info(sport, team):
             'champs': team_info_raw[15].strip(),
             'leaders': ' '.join(team_info_raw[16:18])
         }
-        return models.Team(team_info)
+        return Team(team_info)
 
     elif sport == 'hockey':
         team_info = {
@@ -77,7 +88,7 @@ def get_team_info(sport, team):
                 ' '.join(team_info_raw[15:17])
             ]
         }
-        return models.Team(team_info)
+        return Team(team_info)
 
 
 def _get_football_team_info(team_pattern, team):
@@ -105,7 +116,7 @@ def _get_football_team_info(team_pattern, team):
         'leaders': team_info_raw[11:17]
     }
 
-    return models.Team(team_info)
+    return Team(team_info)
 
 
 def _get_team_info_raw(soup, base_url, team_pattern, team, sport):

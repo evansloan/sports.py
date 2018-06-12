@@ -1,10 +1,42 @@
+import json
 import re
 import xml.etree.ElementTree as ET
-from xml.etree.ElementTree import ParseError
+from datetime import datetime
 
 import requests
 
 from sports_py import errors, models
+
+
+class Match:
+    def __init__(self, sport, match_info):
+        score = match_info['match_score'].split('-')
+        self.sport = sport
+        self.home_score = score[0]
+        self.away_score = score[1]
+        self.match_date = datetime.strptime(match_info['match_date'], '%a, %d %b %Y %H:%M:%S %Z')
+
+        for key, value in match_info.items():
+            if key not in ('match_score', 'match_date'):
+                setattr(self, key, value)
+
+    def to_json(self):
+        """
+        Convert match object into JSON
+        :return: JSON data containing match info
+        """
+        data = {
+            'match': {
+                'sport': self.sport,
+                'home_team': self.home_team,
+                'away_team': self.away_team,
+                'home_score': self.home_score,
+                'away_score': self.away_score,
+                'match_time': self.match_time,
+                'match_link': self.match_link
+            }
+        }
+        return json.dumps(data)
 
 
 def _load_xml(sport):
@@ -18,7 +50,7 @@ def _load_xml(sport):
         url = 'http://www.scorespro.com/rss2/live-{}.xml'.format(sport)
         r = requests.get(url)
         return ET.fromstring(r.content)
-    except ParseError:
+    except ET.ParseError:
         raise errors.SportError(sport)
 
 
@@ -39,7 +71,6 @@ def get_sport_scores(sport):
                 items.append(c)
 
     match_info = {}
-
     matches = []
     for item in items:
         for child in item:
@@ -81,7 +112,7 @@ def get_sport_scores(sport):
             if child.tag == 'guid':
                 match_info['match_link'] = child.text.strip()
 
-        matches.append(models.Match(sport, match_info))
+        matches.append(Match(sport, match_info))
 
     return matches
 
