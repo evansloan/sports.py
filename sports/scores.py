@@ -117,7 +117,7 @@ def get_sport_scores(sport):
     return matches
 
 
-def get_match_score(sport, team1, team2):
+def match(sport, team1, team2):
     """
     Get live scores for a single match
     :param sport: the sport being played
