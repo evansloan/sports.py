@@ -2,5 +2,5 @@ language: python
 python:
   - "3.5"
   - "3.6"
-install: "pip install -r requirements.txt"
+install: "pip install -r test_requirements.txt"
 script: python tests/score_test.py
