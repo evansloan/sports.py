@@ -135,6 +135,3 @@ print(steelers.super_bowls)
 sixers = sports.get_team_info(sports.BASKETBALL, '76ers')
 print(sixers.playoff_app)
 ```
-
-## Credits
-Evan Sloan: evansloan082@gmail.com
