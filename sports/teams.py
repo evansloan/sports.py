@@ -48,13 +48,11 @@ def team(sport, team):
     """
     team_pattern = re.compile(team, re.IGNORECASE)
 
-    supported_sports = ['baseball', 'cfb', 'football', 'hockey', 'basketball']
+    supported_sports = ['baseball', 'football', 'hockey', 'basketball']
     if sport not in supported_sports:
         raise errors.StatsNotFound(sport)
     elif sport == constants.FOOTBALL:
         return _get_football_team_info(team_pattern, team)
-    elif sport == constants.CFB:
-        return _get_cfb_team_info(team_pattern, team)
 
     base_url = 'https://www.{}-reference.com/teams/'.format(sport)
     table_id = 'active_franchises' if sport == 'hockey' else 'teams_active'
@@ -130,20 +128,6 @@ def _get_football_team_info(team_pattern, team):
         'super_bowls': team_info_raw[7],
         'champs': team_info_raw[10],
         'leaders': team_info_raw[11:17]
-    }
-
-    return Team(team_info)
-
-
-def _get_cfb_team_info(team_pattern, team):
-    base_url = 'https://sports-reference.com/cfb/schools/'
-    soup = _get_team_links(base_url, 'schools')
-    team_info_raw = _get_team_info_raw(soup, base_url, team_pattern, team, constants.CFB)
-
-    team_info = {
-        'name': team_info_raw[0],
-        'seasons': team_info_raw[2].split(':')[1].split('(')[0].strip(),
-        'record': team_info_raw[4],
     }
     return Team(team_info)
 
