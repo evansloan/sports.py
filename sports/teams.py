@@ -13,6 +13,9 @@ class Team:
 
         self.raw = info
 
+    def __repr__(self):
+        return 'Name: {}\nAll-time record: {}\nChampionships: {}'.format(self.name, self.record, self.champs)
+
     def __str__(self):
         return 'Name: {}\nAll-time record: {}\nChampionships: {}'.format(self.name, self.record, self.champs)
 

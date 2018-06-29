@@ -20,6 +20,14 @@ class Match:
             if key not in ('match_score', 'match_date'):
                 setattr(self, key, value)
 
+    def __repr__(self):
+        return '{} {}-{} {}'.format(self.home_team, self.home_score,
+                                    self.away_score, self.away_team)
+
+    def __str__(self):
+        return '{} {}-{} {}'.format(self.home_team, self.home_score,
+                                    self.away_score, self.away_team)
+
     def to_json(self):
         """
         Convert match object into JSON
@@ -77,32 +85,32 @@ def get_sport_scores(sport):
             if sport == constants.SOCCER:
                 if child.tag == 'description':
                     title = child.text
-                    index_open = title.index('(')
-                    index_close = title.index(')')
-                    match_info['league'] = title[index_open+1:index_close].strip()
-                    title = title[index_close+1:]
-                    index_vs = title.index('vs')
-                    index_colon = title.index(':')
-                    match_info['home_team'] = title[0:index_vs].replace('#', ' ').strip()
-                    match_info['away_team'] = title[index_vs+2:index_colon].replace('#', ' ').strip()
-                    title = title[index_colon:]
-                    index_hyph = title.index('-')
-                    match_info['match_score'] = title[1:index_hyph+2].strip()
-                    title = title[index_hyph+1:]
-                    index_hyph = title.index('-')
-                    match_info['match_time'] = title[index_hyph+1:].strip()
+                    i_open = title.index('(')
+                    i_close = title.index(')')
+                    match_info['league'] = title[i_open + 1:i_close].strip()
+                    title = title[i_close + 1:]
+                    i_vs = title.index('vs')
+                    i_colon = title.index(':')
+                    match_info['home_team'] = title[0:i_vs].replace('#', ' ').strip()
+                    match_info['away_team'] = title[i_vs + 2:i_colon].replace('#', ' ').strip()
+                    title = title[i_colon:]
+                    i_hyph = title.index('-')
+                    match_info['match_score'] = title[1:i_hyph + 2].strip()
+                    title = title[i_hyph + 1:]
+                    i_hyph = title.index('-')
+                    match_info['match_time'] = title[i_hyph + 1:].strip()
             else:
                 if child.tag == 'title':
                     title = child.text
-                    index_open = title.index('(')
-                    index_close = title.index(')')
-                    match_info['league'] = title[index_open+1:index_close].strip()
-                    title = title[index_close+1:]
-                    index_vs = title.index('vs')
-                    index_colon = title.index(':')
-                    match_info['home_team'] = title[0:index_vs].replace('#', ' ').strip()
-                    match_info['away_team'] = title[index_vs+2:index_colon].replace('#', ' ').strip()
-                    match_info['match_score'] = title[index_colon+1:].strip()
+                    i_open = title.index('(')
+                    i_close = title.index(')')
+                    match_info['league'] = title[i_open + 1:i_close].strip()
+                    title = title[i_close + 1:]
+                    i_vs = title.index('vs')
+                    i_colon = title.index(':')
+                    match_info['home_team'] = title[0:i_vs].replace('#', ' ').strip()
+                    match_info['away_team'] = title[i_vs + 2:i_colon].replace('#', ' ').strip()
+                    match_info['match_score'] = title[i_colon + 1:].strip()
 
                 if child.tag == 'description':
                     match_info['match_time'] = child.text.strip()
@@ -141,7 +149,7 @@ def match(sport, team1, team2):
     raise errors.MatchError(sport, [team1, team2])
 
 
-def get_all_matches():
+def all_matches():
     """
     Get a list of lists containing all live matches.
     Each sport is contained within its own list
@@ -150,8 +158,7 @@ def get_all_matches():
     sports = ['baseball', 'basketball', 'hockey', 'football', 'rugby-union',
               'rugby-league', 'tennis', 'soccer', 'handball', 'volleyball']
 
-    all_matches = []
+    matches = {}
     for sport in sports:
-        all_matches.append(get_sport_scores(sport))
-
-    return all_matches
+        matches[sport] = get_sport_scores(sport)
+    return matches
