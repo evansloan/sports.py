@@ -1,4 +1,5 @@
 [![PyPI](https://img.shields.io/pypi/v/sports.py.svg)](https://pypi.python.org/pypi/sports.py/)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sports.py.svg)
 [![Build Status](https://travis-ci.org/evansloan/sports.py.svg?branch=master)](https://travis-ci.org/evansloan/sports.py)
 [![License](https://img.shields.io/github/license/evansloan/sports.py.svg)](https://github.com/evansloan/sports.py/blob/master/LICENSE)
 
@@ -14,7 +15,7 @@ Scrapes data from:
 - [hockey-reference.com](https://www.hockey-reference.com/)
 
 ## Installation
-Requires Python >= 3.5
+Python >= 3.5
 
 `pip install sports.py`
 
@@ -24,7 +25,7 @@ Requires Python >= 3.5
 import sports
 ```
 
-All valid sports are available as constant variables:
+Valid sports:
 - Baseball: `sports.BASEBALL`
 - Basketball: `sports.BASKETBALL`
 - Cricket: `sports.CRICKET`
@@ -39,18 +40,17 @@ All valid sports are available as constant variables:
 
 **Get a single match**
 
-`get_match_score()` takes three parameters:
+`match()` takes three parameters:
 
 - `sport`: Name of sport being played (see above for a list of valid sports)
 - `team1`: Name of city or team in a match (Not case-sensitive)
 - `team2`: Name of city or team in a match (Not case-sensitive)
 
 ```python
-match = sports.get_match_score(sports.TENNIS, 'Murray', 'Federer')
-print('{}-{}'.format(match.home_score, match.away_score))
+match = sports.match(sports.TENNIS, 'Murray', 'Federer')
 ```
 
-This returns a single Match object which contains the following properties:
+`match()` returns a single Match object which contains the following properties:
 - `sport`: Sport of the match
 - `league`: League of the match
 - `home_team`: Home team
@@ -58,7 +58,7 @@ This returns a single Match object which contains the following properties:
 - `home_score`: Home team score
 - `away_score`: Away team score
 - `match_time`: Current match time
-- `match_date`: datetime object: date the match was played
+- `match_date`: Date the match was played
 - `match_link`: Link to an XML file containing match data
 
 **Get multiple matches**
@@ -66,27 +66,22 @@ This returns a single Match object which contains the following properties:
 `get_sport_scores()` takes one parameter:
 - `sport`: Name of sport (see above for list of valid sports)
 
+`get_sport_scores()` returns a list of Match objects which contain the same properties described above
+
 ```python
 matches = sports.get_sport_scores(sports.BASKETBALL)
 for match in matches:
-    print('{} vs {}: {}-{}'.format(match.home_team, match.away_team,
-                                   match.home_score, match.away_score))
+    print(match)
 ```
-This returns a list of Match objects which contain the same properties described above
 
 **Get all live matches**
-```python
-all_matches = sports.get_all_matches()
-for sport in all_matches:
-    for match in sport:
-            print('{} vs {}: {}-{}'.format(match.home_team, match.away_team,
-                                           match.home_score, match.away_score))
-```
 
-**Convert Match objects to JSON**
+`all_matches()` returns a dictionary of Match objects conatining data from all live matches.
+
 ```python
-pens_game = sports.get_match_score(sports.HOCKEY, 'penguins', 'predators')
-pens_json = pengs_game.to_json()
+all_matches = sports.all_matches()
+for sport, matches in all_matches.items():
+    print(sport, *matches, sep='\n')
 ```
 
 **Get extra team info**
