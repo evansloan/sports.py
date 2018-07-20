@@ -1,3 +1,3 @@
 from .constants import *
-from .scores import all_matches, match, get_sport_scores
-from .teams import team
+from .scores import all_matches, get_match, get_sport
+from .teams import get_team
