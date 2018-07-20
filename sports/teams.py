@@ -151,11 +151,7 @@ def _get_team_info_raw(soup, base_url, team_pattern, team, sport):
     for link in soup.find_all('a'):
         if re.search(team_pattern, link.string):
             team_name = link.string
-            if sport == constants.CFB:
-                team_url = base_url.replace('/cfb/schools/', link['href'])
-                break
-            else:
-                team_url = base_url.replace('/teams/', link['href'])
+            team_url = base_url.replace('/teams/', link['href'])
 
     if team_url is not None and team_name is not None:
         team_soup = BeautifulSoup(requests.get(team_url).content, 'html.parser')
@@ -163,7 +159,6 @@ def _get_team_info_raw(soup, base_url, team_pattern, team, sport):
         team_info_raw = [x.replace('\t', '') for x in team_info_raw]
         team_info_raw = [x.strip() for x in team_info_raw if x != '']
         team_info_raw[0] = team_name
+        return team_info_raw
     else:
         raise errors.TeamNotFoundError(sport, team)
-
-    return team_info_raw
