@@ -20,7 +20,7 @@ class Team:
         return 'Name: {}\nAll-time record: {}\nChampionships: {}'.format(self.name, self.record, self.champs)
 
 
-def team(sport, team):
+def get_team(sport, team):
     """
     Get extra info that pertains to a certain team.
         Info available to all teams:
