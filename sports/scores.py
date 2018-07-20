@@ -11,8 +11,8 @@ class Match:
     def __init__(self, sport, match_info):
         score = match_info['match_score'].split('-')
         self.sport = sport
-        self.home_score = score[0]
-        self.away_score = score[1]
+        self.home_score = int(score[0])
+        self.away_score = int(score[1])
         self.match_date = datetime.strptime(match_info['match_date'], '%a, %d %b %Y %H:%M:%S %Z')
         self.raw = match_info
 
@@ -57,7 +57,6 @@ def _parse_match_info(match, soccer=False):
     :return: Dictionary containing match information
     :rtype: dict
     """
-
     match_info = {}
 
     i_open = match.index('(')
@@ -79,15 +78,11 @@ def _parse_match_info(match, soccer=False):
         match_info['match_time'] = match[i_hyph + 1:].strip()
     else:
         match_info['match_score'] = match[1:].strip()
-        match_info['match_time'] = match.find('description').text.strip()
-
-    match_info['match_date'] = match.find('pubDate').text.strip()
-    match_info['match_link'] = match.find('guid').text.strip()
 
     return match_info
 
 
-def get_sport_scores(sport):
+def get_sport(sport):
     """
     Get live scores for all matches in a particular sport
 
@@ -107,13 +102,17 @@ def get_sport_scores(sport):
         else:
             desc = match.find('title').text
             match_info = _parse_match_info(desc)
+            match_info['match_time'] = match.find('description').text
+
+        match_info['match_date'] = match.find('pubDate').text
+        match_info['match_link'] = match.find('guid').text
 
         matches.append(Match(sport, match_info))
 
     return matches
 
 
-def match(sport, team1, team2):
+def get_match(sport, team1, team2):
     """
     Get live scores for a single match
 
@@ -130,7 +129,7 @@ def match(sport, team1, team2):
     team1_pattern = re.compile(team1, re.I)
     team2_pattern = re.compile(team2, re.I)
 
-    matches = get_sport_scores(sport)
+    matches = get_sport(sport)
     for match in matches:
         if re.search(team1_pattern, match.home_team) or re.search(team1_pattern, match.away_team) \
                 and re.search(team2_pattern, match.away_team) or re.search(team2_pattern, match.home_team):
@@ -152,5 +151,5 @@ def all_matches():
 
     matches = {}
     for sport in sports:
-        matches[sport] = get_sport_scores(sport)
+        matches[sport] = get_sport(sport)
     return matches
