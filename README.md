@@ -1,5 +1,5 @@
 [![PyPI](https://img.shields.io/pypi/v/sports.py.svg)](https://pypi.python.org/pypi/sports.py/)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sports.py.svg)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sports.py.svg)](https://pypi.python.org/pypi/sports.py/)
 [![Build Status](https://travis-ci.org/evansloan/sports.py.svg?branch=master)](https://travis-ci.org/evansloan/sports.py)
 [![License](https://img.shields.io/github/license/evansloan/sports.py.svg)](https://github.com/evansloan/sports.py/blob/master/LICENSE)
 
@@ -40,17 +40,13 @@ Valid sports:
 
 **Get a single match**
 
-`match()` takes three parameters:
+`get_match()` takes three parameters:
 
 - `sport`: Name of sport being played (see above for a list of valid sports)
 - `team1`: Name of city or team in a match (Not case-sensitive)
 - `team2`: Name of city or team in a match (Not case-sensitive)
 
-```python
-match = sports.match(sports.TENNIS, 'Murray', 'Federer')
-```
-
-`match()` returns a single Match object which contains the following properties:
+`get_match()` returns a single Match object which contains the following properties:
 - `sport`: Sport of the match
 - `league`: League of the match
 - `home_team`: Home team
@@ -61,27 +57,28 @@ match = sports.match(sports.TENNIS, 'Murray', 'Federer')
 - `match_date`: Date the match was played
 - `match_link`: Link to an XML file containing match data
 
+```python
+match = sports.match(sports.TENNIS, 'Murray', 'Federer')
+```
+
 **Get multiple matches**
 
-`get_sport_scores()` takes one parameter:
+`get_sport()` takes one parameter:
 - `sport`: Name of sport (see above for list of valid sports)
 
-`get_sport_scores()` returns a list of Match objects which contain the same properties described above
+`get_sport()` returns a list of Match objects which contain the same properties described above
 
 ```python
 matches = sports.get_sport_scores(sports.BASKETBALL)
-for match in matches:
-    print(match)
 ```
 
 **Get all live matches**
 
-`all_matches()` returns a dictionary of Match objects conatining data from all live matches.
+`all_matches()` returns a dictionary of Match objects grouped by sport conatining data from all live matches.
 
 ```python
 all_matches = sports.all_matches()
-for sport, matches in all_matches.items():
-    print(sport, *matches, sep='\n')
+baseball = all_matches['baseball']
 ```
 
 **Get extra team info**
@@ -90,7 +87,7 @@ for sport, matches in all_matches.items():
 
 Get team information including overall record, championships won and more.
 
-`get_team_info()` takes two parameters:
+`get_team()` takes two parameters:
 - `sport`: Sport of the team the find
 - `team`: Name of city or team to find (Not case-sensitive)
 
