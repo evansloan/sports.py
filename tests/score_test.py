@@ -1,4 +1,3 @@
-import json
 import unittest
 
 import sports
@@ -15,7 +14,7 @@ class TestScores(unittest.TestCase):
         'match_link': 'test',
     }
 
-    match = sports.models.Match(sports.HOCKEY, match_data)
+    match = sports.scores.Match(sports.HOCKEY, match_data)
     matches = sports.get_sport(sports.BASEBALL)
 
     def test_match(self):
