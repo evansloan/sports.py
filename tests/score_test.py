@@ -15,6 +15,7 @@ class TestScores(unittest.TestCase):
     }
 
     hockey_match = sports.scores.Match(sports.HOCKEY, hockey_data)
+    steelers = sports.get_team(sports.FOOTBALL, 'steelers')
 
     def test_xml(self):
         try:
@@ -45,6 +46,12 @@ class TestScores(unittest.TestCase):
     def test_sport(self):
         self.assertEqual(self.hockey_match.sport, sports.HOCKEY)
         self.assertIsNotNone(sports.get_sport(sports.SOCCER))
+
+    def test_get_teams(self):
+        self.assertIsNotNone(sports.get_team(sports.FOOTBALL, 'steelers'))
+        self.assertIsNotNone(sports.get_team(sports.HOCKEY, 'penguins'))
+        self.assertIsNotNone(sports.get_team(sports.BASKETBALL, '76ers'))
+        self.assertIsNotNone(sports.get_team(sports.BASEBALL, 'pirates'))
 
 
 if __name__ == '__main__':
