@@ -29,21 +29,33 @@ class Match:
                                     self.away_score, self.away_team)
 
 
-def _load_xml(sport):
+def _request_xml(sport):
     """
-    Parse XML file containing match details using ElementTree
+    Request XML data from scorespro.com
 
     :param sport: sport being played
     :type sport: string
-    :return: ElementTree instance containing data from XML file
-    :rtyp: ElementTree instance
+    :return: XML data
+    :rtype: string
     """
-    try:
-        url = 'http://www.scorespro.com/rss2/live-{}.xml'.format(sport)
-        r = requests.get(url)
-        return ET.fromstring(r.content).find('channel').findall('item')
-    except ET.ParseError:
+    url = 'http://www.scorespro.com/rss2/live-{}.xml'.format(sport)
+    r = requests.get(url)
+    if r.ok:
+        return _load_xml(r.content)
+    else:
         raise errors.SportError(sport)
+
+
+def _load_xml(xml_data):
+    """
+    Parse XML file containing match details using ElementTree
+
+    :param xml_data: Data containing match info for a specific sport
+    :type xml_data: string
+    :return: ElementTree instance containing data from XML file
+    :rtype: ElementTree instance
+    """
+    return ET.fromstring(xml_data).find('channel').findall('item')
 
 
 def _parse_match_info(match, soccer=False):
@@ -92,7 +104,7 @@ def get_sport(sport):
     :rtype: list
     """
     sport = sport.lower()
-    data = _load_xml(sport)
+    data = _request_xml(sport)
 
     matches = []
     for match in data:
