@@ -44,7 +44,7 @@ class TestScores(unittest.TestCase):
 
     def test_sport(self):
         self.assertEqual(self.hockey_match.sport, sports.HOCKEY)
-        self.assertIsNone(sports.get_sport(sports.SOCCER))
+        self.assertIsNotNone(sports.get_sport(sports.SOCCER))
 
 
 if __name__ == '__main__':
