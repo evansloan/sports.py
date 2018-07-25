@@ -25,8 +25,8 @@ class TestScores(unittest.TestCase):
         self.assertEqual(self.match.away_team, 'Nashville Predators')
 
     def test_score(self):
-        self.assertEqual(self.match.home_score, '2')
-        self.assertEqual(self.match.away_score, '0')
+        self.assertEqual(self.match.home_score, 2)
+        self.assertEqual(self.match.away_score, 0)
 
     def test_date(self):
         self.assertIsNotNone(self.match.match_date)
