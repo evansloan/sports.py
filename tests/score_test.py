@@ -66,6 +66,8 @@ class TestScores(unittest.TestCase):
         self.assertEqual(str(sports.errors.TeamNotFoundError(sport, teams[0])),
                          'Team steelers not found for sport football')
 
+        self.assertRaises(sports.errors.StatsNotFound, sports.get_team, 'fake sport', 'fake team')
+
 
 if __name__ == '__main__':
     unittest.main()
