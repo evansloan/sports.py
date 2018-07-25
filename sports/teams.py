@@ -3,10 +3,24 @@ import re
 import requests
 from bs4 import BeautifulSoup, SoupStrainer
 
-from sports_py import errors, models
+from sports import constants, errors
 
 
-def get_team_info(sport, team):
+class Team:
+    def __init__(self, info):
+        for key, value in info.items():
+            setattr(self, key, value)
+
+        self.raw = info
+
+    def __repr__(self):
+        return 'Name: {}\nAll-time record: {}\nChampionships: {}'.format(self.name, self.record, self.champs)
+
+    def __str__(self):
+        return 'Name: {}\nAll-time record: {}\nChampionships: {}'.format(self.name, self.record, self.champs)
+
+
+def get_team(sport, team):
     """
     Get extra info that pertains to a certain team.
         Info available to all teams:
@@ -37,11 +51,11 @@ def get_team_info(sport, team):
     """
     team_pattern = re.compile(team, re.IGNORECASE)
 
-    supported_sports = ['baseball', 'football', 'hockey']
+    supported_sports = ['baseball', 'football', 'hockey', 'basketball']
     if sport not in supported_sports:
         raise errors.StatsNotFound(sport)
-    elif sport == 'football':
-        return _get_football_team_info(team_pattern, team)
+    elif sport == constants.FOOTBALL:
+        sport = 'pro-football'
 
     base_url = 'https://www.{}-reference.com/teams/'.format(sport)
     table_id = 'active_franchises' if sport == 'hockey' else 'teams_active'
@@ -50,22 +64,44 @@ def get_team_info(sport, team):
 
     team_info_raw = _get_team_info_raw(soup, base_url, team_pattern, team, sport)
 
-    if sport == 'baseball':
+    if sport == constants.BASEBALL:
         team_info = {
             'name': team_info_raw[0],
-            'record': team_info_raw[9].strip(),
-            'seasons': team_info_raw[6:7][0].strip(),
-            'playoff_app': team_info_raw[11].strip(),
-            'pennants': team_info_raw[13].strip(),
-            'champs': team_info_raw[15].strip(),
+            'record': team_info_raw[9],
+            'seasons': team_info_raw[6:7][0],
+            'playoff_app': team_info_raw[11],
+            'pennants': team_info_raw[13],
+            'champs': team_info_raw[15],
             'leaders': ' '.join(team_info_raw[16:18])
         }
-        return models.Team(team_info)
+        return Team(team_info)
 
-    elif sport == 'hockey':
+    elif sport == constants.BASKETBALL:
         team_info = {
             'name': team_info_raw[0],
-            'record': team_info_raw[9].strip(),
+            'record': team_info_raw[11].split(',')[0],
+            'seasons': team_info_raw[7].replace(';', ''),
+            'playoff_app': team_info_raw[14],
+            'champs': team_info_raw[17]
+        }
+        return Team(team_info)
+
+    elif sport == 'pro-football':
+        team_info = {
+            'name': team_info_raw[0],
+            'seasons': team_info_raw[2].split()[1],
+            'record': team_info_raw[4],
+            'playoff_record': team_info_raw[5].split()[2],
+            'super_bowls': team_info_raw[7],
+            'champs': team_info_raw[10],
+            'leaders': team_info_raw[11:17]
+        }
+        return Team(team_info)
+
+    elif sport == constants.HOCKEY:
+        team_info = {
+            'name': team_info_raw[0],
+            'record': team_info_raw[9],
             'points': team_info_raw[10][1:-1],
             'seasons': team_info_raw[2].split()[1],
             'playoff_app': team_info_raw[3].split()[3],
@@ -77,35 +113,12 @@ def get_team_info(sport, team):
                 ' '.join(team_info_raw[15:17])
             ]
         }
-        return models.Team(team_info)
+        return Team(team_info)
 
 
-def _get_football_team_info(team_pattern, team):
-    """
-    Parses through raw data about NFL teams
-
-    :param team_pattern: Cpomiled regex pattern of team name/city
-    :param team: Name of the team that is being searched for
-    :param sport: Sport that is being searched for (always football)
-    :return: Team object.
-    """
-    base_url = 'https://www.pro-football-reference.com/teams/'
-    links = SoupStrainer('table', {'id': 'teams_active'})
-    soup = BeautifulSoup(requests.get(base_url).content, 'html.parser', parse_only=links)
-
-    team_info_raw = _get_team_info_raw(soup, base_url, team_pattern, team, 'football')
-
-    team_info = {
-        'name': team_info_raw[0],
-        'seasons': team_info_raw[2].split()[1],
-        'record': team_info_raw[4],
-        'playoff_record': team_info_raw[5].split()[2],
-        'super_bowls': team_info_raw[7].strip(),
-        'champs': team_info_raw[10],
-        'leaders': team_info_raw[11:17]
-    }
-
-    return models.Team(team_info)
+def _get_team_links(base_url, table_id):
+    links = SoupStrainer('table', {'id': table_id})
+    return BeautifulSoup(requests.get(base_url).content, 'html.parser', parse_only=links)
 
 
 def _get_team_info_raw(soup, base_url, team_pattern, team, sport):
@@ -123,16 +136,15 @@ def _get_team_info_raw(soup, base_url, team_pattern, team, sport):
     team_name = None
     for link in soup.find_all('a'):
         if re.search(team_pattern, link.string):
-            team_url = base_url.replace('/teams/', '') + link['href']
             team_name = link.string
+            team_url = base_url.replace('/teams/', link['href'])
 
     if team_url is not None and team_name is not None:
         team_soup = BeautifulSoup(requests.get(team_url).content, 'html.parser')
         team_info_raw = team_soup.find('div', id='meta').contents[3].get_text().split('\n')
         team_info_raw = [x.replace('\t', '') for x in team_info_raw]
-        team_info_raw = [x for x in team_info_raw if x != '']
+        team_info_raw = [x.strip() for x in team_info_raw if x != '']
         team_info_raw[0] = team_name
+        return team_info_raw
     else:
         raise errors.TeamNotFoundError(sport, team)
-
-    return team_info_raw

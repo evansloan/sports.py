@@ -1,5 +1,7 @@
 [![PyPI](https://img.shields.io/pypi/v/sports.py.svg)](https://pypi.python.org/pypi/sports.py/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sports.py.svg)](https://pypi.python.org/pypi/sports.py/)
 [![Build Status](https://travis-ci.org/evansloan/sports.py.svg?branch=master)](https://travis-ci.org/evansloan/sports.py)
+[![Coveralls github branch](https://img.shields.io/coveralls/github/evansloan/sports.py/dev.svg)](https://coveralls.io/github/evansloan/sports.py?branch=dev)
 [![License](https://img.shields.io/github/license/evansloan/sports.py.svg)](https://github.com/evansloan/sports.py/blob/master/LICENSE)
 
 
@@ -10,43 +12,42 @@ Scrapes data from:
 - [scorespro.com](https://www.scorespro.com/)
 - [pro-football-reference.com](https://www.pro-football-reference.com/)
 - [baseball-reference.com](https://www.baseball-reference.com/)
+- [basketball-reference.com](https://www.basketball-reference.com/)
 - [hockey-reference.com](https://www.hockey-reference.com/)
 
 ## Installation
-Requires Python 2.7 or Python >= 3.5
+Python >= 3.5
 
 `pip install sports.py`
 
 ## Usage
 
-List of valid sports:
-- Baseball: `baseball`
-- Basketball: `basketball`
-- Cricket: `cricket`
-- Football: `football`
-- Handball: `handball`
-- Hockey: `hockey`
-- Rugby: `rugby-union` or `rugby-league`
-- Soccer: `soccer`
-- Tennis: `tennis`
-- Volleyball: `volleyball`
+```python
+import sports
+```
+
+Valid sports:
+- Baseball: `sports.BASEBALL`
+- Basketball: `sports.BASKETBALL`
+- Cricket: `sports.CRICKET`
+- Football: `sports.FOOTBALL`
+- Handball: `sports.HANDBALL`
+- Hockey: `sports.HOCKEY`
+- Rugby Union: `sports.RUGBY_U`
+- Rugby League: `sports.RUGBY_L`
+- Soccer: `sports.SOCCER`
+- Tennis: `sports.TENNIS`
+- Volleyball: `sports.VOLLEYBALL`
 
 **Get a single match**
 
-`get_match_score()` takes three parameters:
+`get_match()` takes three parameters:
 
 - `sport`: Name of sport being played (see above for a list of valid sports)
-- `team1`: Name of city of a team in a match (Not case-sensitive)
-- `team2`: Name of city of a team in a match (Not case-sensitive)
+- `team1`: Name of city or team in a match (Not case-sensitive)
+- `team2`: Name of city or team in a match (Not case-sensitive)
 
-```python
-import sports_py
-
-match = sports_py.get_match_score('tennis', 'Murray', 'Federer')
-print('{}-{}'.format(match.home_score, match.away_score))
-```
-
-This returns a single Match object which contains the following properties:
+`get_match()` returns a single Match object which contains the following properties:
 - `sport`: Sport of the match
 - `league`: League of the match
 - `home_team`: Home team
@@ -54,50 +55,40 @@ This returns a single Match object which contains the following properties:
 - `home_score`: Home team score
 - `away_score`: Away team score
 - `match_time`: Current match time
-- `match_date`: datetime object: date the match was played
+- `match_date`: Date the match was played
 - `match_link`: Link to an XML file containing match data
+
+```python
+match = sports.match(sports.TENNIS, 'Murray', 'Federer')
+```
 
 **Get multiple matches**
 
-`get_sport_scores()` takes one parameter:
+`get_sport()` takes one parameter:
 - `sport`: Name of sport (see above for list of valid sports)
 
-```python
-import sports_py
+`get_sport()` returns a list of Match objects which contain the same properties described above
 
-matches = sports_py.get_sport_scores('basketball')
-for match in matches:
-    print('{} vs {}: {}-{}'.format(match.home_team, match.away_team,
-                                       match.home_score, match.away_score))
+```python
+matches = sports.get_sport_scores(sports.BASKETBALL)
 ```
-This returns a list of Match objects which contain the same properties described above
 
 **Get all live matches**
+
+`all_matches()` returns a dictionary of Match objects grouped by sport conatining data from all live matches.
+
 ```python
-import sports_py
-
-all_matches = sports_py.get_all_matches()
-for sport in all_matches:
-    for match in sport:
-            print('{} vs {}: {}-{}'.format(match.home_team, match.away_team,
-                                               match.home_score, match.away_score))
-```
-
-**Convert Match objects to JSON**
-```python
-import sports_py
-
-pens_json = sports_py.get_match_score('hockey', 'panguins', 'predators').to_json()
-print(pens_game)
+all_matches = sports.all_matches()
+baseball = all_matches['baseball']
 ```
 
 **Get extra team info**
 
-*Only works with MLB, NFL, and NHL teams*
+*Only works with MLB, NBA, NFL, and NHL teams*
 
 Get team information including overall record, championships won and more.
 
-`get_team_info()` takes two parameters:
+`get_team()` takes two parameters:
 - `sport`: Sport of the team the find
 - `team`: Name of city or team to find (Not case-sensitive)
 
@@ -121,21 +112,19 @@ Properties available to only NHL teams:
 Properties available to both NFL/NHL teams:
 - `playoff_record`: Overall playoff record
 
-Properties available to both MLB/NHL teams:
+Properties available to MLB, NBA, NHL teams:
 - `playoff_app`: Total number of playoff appearances
 
 ```python
-import sports_py
-
-pirates = sports_py.get_team_info('baseball', 'pirates')
+pirates = sports.get_team_info(sports.BASEBALL, 'pirates')
 print(pirates.pennants)
 
-penguins = sports_py.get_team_info('hockey', 'penguins')
+penguins = sports.get_team_info(sports.HOCKEY, 'penguins')
 print(penguins.points)
 
-steelers = sports_py.get_team_info('football', 'steelers')
+steelers = sports.get_team_info(sports.FOOTBALL, 'steelers')
 print(steelers.super_bowls)
-```
 
-## Credits
-Evan Sloan: evansloan082@gmail.com
+sixers = sports.get_team_info(sports.BASKETBALL, '76ers')
+print(sixers.playoff_app)
+```

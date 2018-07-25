@@ -1,11 +1,10 @@
-import json
 import unittest
 
-import sports_py
+import sports
 
 
 class TestScores(unittest.TestCase):
-    match_data = {
+    hockey_data = {
         'league': 'NHL',
         'home_team': 'Pittsburgh Penguins',
         'away_team': 'Nashville Predators',
@@ -15,35 +14,59 @@ class TestScores(unittest.TestCase):
         'match_link': 'test',
     }
 
-    match = sports_py.models.Match('hockey', match_data)
-    matches = sports_py.get_sport_scores('baseball')
+    hockey_match = sports.scores.Match(sports.HOCKEY, hockey_data)
+    steelers = sports.get_team(sports.FOOTBALL, 'steelers')
+
+    def test_xml(self):
+
+        try:
+            sports.scores._request_xml(sports.BASEBALL)
+        except sports.errors.SportError:
+            self.fail('XML request raised SportError')
+
+        self.assertRaises(sports.errors.SportError, sports.scores._request_xml, 'fake sport')
 
     def test_match(self):
-        self.assertIsNotNone(self.match)
+        self.assertIsNotNone(self.hockey_match)
+        self.assertEqual(str(self.hockey_match), 'Pittsburgh Penguins 2-0 Nashville Predators')
+        self.assertEqual(repr(self.hockey_match), 'Pittsburgh Penguins 2-0 Nashville Predators')
+
+        self.assertIsNotNone(sports.all_matches())
 
     def test_teams(self):
-        self.assertEqual(self.match.home_team, 'Pittsburgh Penguins')
-        self.assertEqual(self.match.away_team, 'Nashville Predators')
+        self.assertEqual(self.hockey_match.home_team, 'Pittsburgh Penguins')
+        self.assertEqual(self.hockey_match.away_team, 'Nashville Predators')
 
     def test_score(self):
-        self.assertEqual(self.match.home_score, '2')
-        self.assertEqual(self.match.away_score, '0')
+        self.assertEqual(self.hockey_match.home_score, 2)
+        self.assertEqual(self.hockey_match.away_score, 0)
 
     def test_date(self):
-        self.assertIsNotNone(self.match.match_date)
+        self.assertIsNotNone(self.hockey_match.match_date)
 
     def test_sport(self):
-        self.assertEqual(self.match.sport, 'hockey')
+        self.assertEqual(self.hockey_match.sport, sports.HOCKEY)
+        self.assertIsNotNone(sports.get_sport(sports.SOCCER))
 
-    def test_json(self):
-        try:
-            json.loads(self.match.to_json())
-            for match in self.matches:
-                json.loads(match.to_json())
-            self.test = True
-        except ValueError:
-            self.test = False
-        self.assertEqual(self.test, True)
+    def test_get_teams(self):
+        self.assertIsNotNone(sports.get_team(sports.FOOTBALL, 'steelers'))
+        self.assertIsNotNone(sports.get_team(sports.HOCKEY, 'penguins'))
+        self.assertIsNotNone(sports.get_team(sports.BASKETBALL, '76ers'))
+        self.assertIsNotNone(sports.get_team(sports.BASEBALL, 'pirates'))
+
+    def test_errors(self):
+        sport = sports.FOOTBALL
+        teams = ['steelers', 'patriots']
+        self.assertEqual(str(sports.errors.MatchError(sport, teams)),
+                         'football match not found for steelers, patriots')
+        self.assertEqual(str(sports.errors.SportError('fake sport')),
+                         'Sport not found for fake sport')
+        self.assertEqual(str(sports.errors.StatsNotFound(sport)),
+                         'Extra stats not yet supported for football')
+        self.assertEqual(str(sports.errors.TeamNotFoundError(sport, teams[0])),
+                         'Team steelers not found for sport football')
+
+        self.assertRaises(sports.errors.StatsNotFound, sports.get_team, 'fake sport', 'fake team')
 
 
 if __name__ == '__main__':
