@@ -1,7 +1,7 @@
 import json
 import unittest
 
-import sports_py
+import sports
 
 
 class TestScores(unittest.TestCase):
@@ -15,8 +15,8 @@ class TestScores(unittest.TestCase):
         'match_link': 'test',
     }
 
-    match = sports_py.models.Match('hockey', match_data)
-    matches = sports_py.get_sport_scores('baseball')
+    match = sports.models.Match(sports.HOCKEY, match_data)
+    matches = sports.get_sport(sports.BASEBALL)
 
     def test_match(self):
         self.assertIsNotNone(self.match)
@@ -33,17 +33,7 @@ class TestScores(unittest.TestCase):
         self.assertIsNotNone(self.match.match_date)
 
     def test_sport(self):
-        self.assertEqual(self.match.sport, 'hockey')
-
-    def test_json(self):
-        try:
-            json.loads(self.match.to_json())
-            for match in self.matches:
-                json.loads(match.to_json())
-            self.test = True
-        except ValueError:
-            self.test = False
-        self.assertEqual(self.test, True)
+        self.assertEqual(self.match.sport, sports.HOCKEY)
 
 
 if __name__ == '__main__':
