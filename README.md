@@ -1,7 +1,7 @@
 [![PyPI](https://img.shields.io/pypi/v/sports.py.svg)](https://pypi.python.org/pypi/sports.py/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sports.py.svg)](https://pypi.python.org/pypi/sports.py/)
 [![Build Status](https://travis-ci.org/evansloan/sports.py.svg?branch=master)](https://travis-ci.org/evansloan/sports.py)
-[![Coveralls github branch](https://img.shields.io/coveralls/github/evansloan/sports.py/dev.svg)](https://coveralls.io/github/evansloan/sports.py?branch=dev)
+[![Coveralls github branch](https://img.shields.io/coveralls/github/evansloan/sports.py/master.svg)](https://coveralls.io/github/evansloan/sports.py?branch=master)
 [![License](https://img.shields.io/github/license/evansloan/sports.py.svg)](https://github.com/evansloan/sports.py/blob/master/LICENSE)
 
 
