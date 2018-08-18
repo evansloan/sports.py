@@ -59,7 +59,7 @@ Valid sports:
 - `match_link`: Link to an XML file containing match data
 
 ```python
-match = sports.match(sports.TENNIS, 'Murray', 'Federer')
+match = sports.get_match(sports.TENNIS, 'Murray', 'Federer')
 ```
 
 **Get multiple matches**
@@ -70,7 +70,7 @@ match = sports.match(sports.TENNIS, 'Murray', 'Federer')
 `get_sport()` returns a list of Match objects which contain the same properties described above
 
 ```python
-matches = sports.get_sport_scores(sports.BASKETBALL)
+matches = sports.get_sport(sports.BASKETBALL)
 ```
 
 **Get all live matches**
