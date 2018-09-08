@@ -1,8 +1,8 @@
 import re
-import xml.etree.ElementTree as ET
 from datetime import datetime
 
 import requests
+from defusedxml import ElementTree as ET
 
 from sports import constants, errors
 
@@ -11,8 +11,14 @@ class Match:
     def __init__(self, sport, match_info):
         score = match_info['match_score'].split('-')
         self.sport = sport
-        self.home_score = int(score[0])
-        self.away_score = int(score[1])
+
+        try:
+            self.home_score = int(score[0])
+            self.away_score = int(score[1])
+        except ValueError:
+            self.home_score = 0
+            self.away_score = 0
+
         self.match_date = datetime.strptime(match_info['match_date'], '%a, %d %b %Y %H:%M:%S %Z')
         self.raw = match_info
 
