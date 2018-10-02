@@ -158,16 +158,11 @@ def get_match(sport, team1, team2):
 
 def all_matches():
     """
-    Get a list of lists containing all live matches.
-    Each sport is contained within its own list
+    Get a dictionary of all live and recently concluded matches.
+    Each entry in the dictionary is a list containing the matches for a
+    specific sport.
 
-    :return: List containing lists of match objects
-    :rtype: list
+    :return: Dict containing match objects grouped by sport
+    :rtype: dict
     """
-    sports = ['baseball', 'basketball', 'hockey', 'football', 'rugby-union',
-              'rugby-league', 'tennis', 'soccer', 'handball', 'volleyball']
-
-    matches = {}
-    for sport in sports:
-        matches[sport] = get_sport(sport)
-    return matches
+    return {sport: get_sport(sport) for sport in constants.SPORTS}
