@@ -9,7 +9,7 @@ with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 setup(
     name='sports.py',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
-    version='2.0.4',
+    version='2.0.5',
     description='A simple Python package to gather live sports scores',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -23,7 +23,7 @@ setup(
     author='Evan Sloan',
     author_email='evansloan082@gmail.com',
     url='https://github.com/evansloan/sports.py',
-    download_url='https://github.com/evansloan/sports.py/archive/v2.0.4.tar.gz',
+    download_url='https://github.com/evansloan/sports.py/archive/v2.0.5.tar.gz',
     keywords=['sports', 'scores', 'live scores', 'hockey', 'basketball', 'baseball', 'football'],
     install_requires=['requests', 'bs4', 'defusedxml'],
     python_requires='>=3'
