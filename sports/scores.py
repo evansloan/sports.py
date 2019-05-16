@@ -45,10 +45,10 @@ def _request_xml(sport):
     :rtype: string
     """
     url = 'http://www.scorespro.com/rss2/live-{}.xml'.format(sport)
-    r = requests.get(url)
-    if r.ok:
+    try:
+        r = requests.get(url)
         return _load_xml(r.content)
-    else:
+    except ET.ParseError:
         raise errors.SportError(sport)
 
 
