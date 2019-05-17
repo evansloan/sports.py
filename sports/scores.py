@@ -90,6 +90,11 @@ def _parse_match_info(match, soccer=False):
     i_hyph = match.index('-')
     match_info['match_score'] = match[1:i_hyph + 2].strip()
 
+    if soccer:
+        match = match[i_hyph + 1:]
+        i_hyph = match.index('-')
+        match_info['match_time'] = match[i_hyph + 1:].strip()
+
     return match_info
 
 
@@ -107,9 +112,18 @@ def get_sport(sport):
 
     matches = []
     for match in data:
-        desc = match.find('title').text
-        match_info = _parse_match_info(desc)
-        match_info['match_time'] = match.find('description').text
+        if sport == constants.SOCCER:
+            try:
+                match_string = match.find('description').text
+                match_info = _parse_match_info(match_string, soccer=True)
+            except (AttributeError, ValueError):
+                match_string = match.find('title').text
+                match_info = _parse_match_info(match_string)
+        else:
+            match_string = match.find('title').text
+            match_info = _parse_match_info(match_string)
+            match_info['match_time'] = match.find('description').text
+
         match_info['match_date'] = match.find('pubDate').text
         match_info['match_link'] = match.find('guid').text
 
