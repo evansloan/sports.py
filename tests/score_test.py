@@ -18,7 +18,6 @@ class TestScores(unittest.TestCase):
     steelers = sports.get_team(sports.FOOTBALL, 'steelers')
 
     def test_xml(self):
-
         try:
             sports.scores._request_xml(sports.BASEBALL)
         except sports.errors.SportError:
@@ -58,15 +57,15 @@ class TestScores(unittest.TestCase):
         sport = sports.FOOTBALL
         teams = ['steelers', 'patriots']
         self.assertEqual(str(sports.errors.MatchError(sport, teams)),
-                         'football match not found for steelers, patriots')
+                         'Football match not found for steelers, patriots')
         self.assertEqual(str(sports.errors.SportError('fake sport')),
                          'Sport not found for fake sport')
-        self.assertEqual(str(sports.errors.StatsNotFound(sport)),
+        self.assertEqual(str(sports.errors.StatsError(sport)),
                          'Extra stats not yet supported for football')
-        self.assertEqual(str(sports.errors.TeamNotFoundError(sport, teams[0])),
+        self.assertEqual(str(sports.errors.TeamError(sport, teams[0])),
                          'Team steelers not found for sport football')
 
-        self.assertRaises(sports.errors.StatsNotFound, sports.get_team, 'fake sport', 'fake team')
+        self.assertRaises(sports.errors.StatsError, sports.get_team, 'fake sport', 'fake team')
 
 
 if __name__ == '__main__':

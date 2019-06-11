@@ -4,7 +4,7 @@ class MatchError(Exception):
         self.teams = teams
 
     def __str__(self):
-        return '{} match not found for {}'.format(self.sport, ', '.join(self.teams))
+        return '{} match not found for {}'.format(self.sport.capitalize(), ', '.join(self.teams))
 
 
 class SportError(Exception):
