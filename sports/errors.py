@@ -15,7 +15,7 @@ class SportError(Exception):
         return 'Sport not found for {}'.format(self.sport)
 
 
-class StatsNotFound(Exception):
+class StatsError(Exception):
     def __init__(self, sport):
         self.sport = sport
 
@@ -23,7 +23,7 @@ class StatsNotFound(Exception):
         return 'Extra stats not yet supported for {}'.format(self.sport)
 
 
-class TeamNotFoundError(Exception):
+class TeamError(Exception):
     def __init__(self, sport, team):
         self.sport = sport
         self.team = team
