@@ -53,7 +53,7 @@ def get_team(sport, team):
 
     supported_sports = ['baseball', 'football', 'hockey', 'basketball']
     if sport not in supported_sports:
-        raise errors.StatsNotFound(sport)
+        raise errors.StatsError(sport)
     elif sport == constants.FOOTBALL:
         sport = 'pro-football'
 
@@ -147,4 +147,4 @@ def _get_team_info_raw(soup, base_url, team_pattern, team, sport):
         team_info_raw[0] = team_name
         return team_info_raw
     else:
-        raise errors.TeamNotFoundError(sport, team)
+        raise errors.TeamError(sport, team)
