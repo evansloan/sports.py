@@ -9,22 +9,17 @@ from sports import constants, errors
 
 class Match:
     def __init__(self, sport, match_info):
-        score = match_info['match_score'].split('-')
         self.sport = sport
-
-        try:
-            self.home_score = int(score[0])
-            self.away_score = int(score[1])
-        except ValueError:
-            self.home_score = 0
-            self.away_score = 0
-
         self.match_date = datetime.strptime(match_info['match_date'], '%a, %d %b %Y %H:%M:%S %Z')
         self.raw = match_info
 
         for key, value in match_info.items():
-            if key not in ('match_score', 'match_date'):
+            if key != 'match_date':
                 setattr(self, key, value)
+
+        if sport != constants.CRICKET:
+            self.home_score = int(self.home_score)
+            self.away_score = int(self.away_score)
 
     def __repr__(self):
         return '{} {}-{} {}'.format(self.home_team, self.home_score,
@@ -64,36 +59,36 @@ def _load_xml(xml_data):
     return ET.fromstring(xml_data).find('channel').findall('item')
 
 
-def _parse_match_info(match, soccer=False):
+def _parse_match_info(match, regex, soccer=False):
     """
     Parse string containing info of a specific match
 
     :param match: Match data
     :type match: string
+    :param regex: Match data pattern
+    :type regex: Regex object
     :param soccer: Set to true if match contains soccer data, defaults to False
     :type soccer: bool, optional
     :return: Dictionary containing match information
     :rtype: dict
     """
-    match_info = {}
+    match = regex.search(match)
 
-    i_open = match.index('(')
-    i_close = match.index(')')
-    match_info['league'] = match[i_open + 1:i_close].strip()
+    match_info = {
+        'league': match.group(1),
+        'home_team': match.group(2),
+        'away_team': match.group(3),
+        'home_score': match.group(4),
+        'away_score': match.group(5)
+    }
 
-    match = match[i_close + 1:]
-    i_vs = match.index('vs')
-    i_colon = match.index(':')
-    match_info['home_team'] = match[0:i_vs].replace('#', ' ').strip()
-    match_info['away_team'] = match[i_vs + 2:i_colon].replace('#', ' ').strip()
-    match = match[i_colon:]
-    i_hyph = match.index('-')
-    match_info['match_score'] = match[1:i_hyph + 2].strip()
+    if match_info['home_score'] is None:
+        match_info['home_score'] = '0'
+    if match_info['away_score'] is None:
+        match_info['away_score'] = '0'
 
     if soccer:
-        match = match[i_hyph + 1:]
-        i_hyph = match.index('-')
-        match_info['match_time'] = match[i_hyph + 1:].strip()
+        match_info['match_time'] = match[6]
 
     return match_info
 
@@ -110,18 +105,24 @@ def get_sport(sport):
     sport = sport.lower()
     data = _request_xml(sport)
 
+    cricket_regex = re.compile(r'\(([^)]+)\) #([\w\s]+) vs #([\w\s]+): ([\d/]+\s\([^)]+\))? ?- ([\d/]+\s\([^)]+\))?')
+    soccer_regex = re.compile(r'\(([^)]+)\) #([\w\s]+) vs #([\w\s]+): (\d+)-(\d+)\. ([\w\s]+)')
+    regex = re.compile(r'\(([^)]+)\) #([\w\s]+) vs #([\w\s]+): (\d+)-(\d+)')
+
     matches = []
     for match in data:
         if sport == constants.SOCCER:
             try:
                 match_string = match.find('description').text
-                match_info = _parse_match_info(match_string, soccer=True)
-            except (AttributeError, ValueError):
+                match_info = _parse_match_info(match_string, soccer_regex, soccer=True)
+            except (AttributeError, TypeError):
                 match_string = match.find('title').text
-                match_info = _parse_match_info(match_string)
+                match_info = _parse_match_info(match_string, regex)
         else:
+            if sport == constants.CRICKET:
+                regex = cricket_regex
             match_string = match.find('title').text
-            match_info = _parse_match_info(match_string)
+            match_info = _parse_match_info(match_string, regex)
             match_info['match_time'] = match.find('description').text
 
         match_info['match_date'] = match.find('pubDate').text
