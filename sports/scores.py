@@ -105,9 +105,9 @@ def get_sport(sport):
     sport = sport.lower()
     data = _request_xml(sport)
 
-    cricket_regex = re.compile(r'\(([^)]+)\) #([.,\'"\-\w\d\s]+) vs #([.,\'"\-\w\d\s]+): ([\d/]+\s\([^)]+\))? ?- ([\d/]+\s\([^)]+\))?')
-    soccer_regex = re.compile(r'\(([^)]+)\) #([.,\'"\-\w\d\s]+) vs #([.,\'"\-\w\d\s]+): (\d+)-(\d+)\. ([\w\s]+)')
-    regex = re.compile(r'\(([^)]+)\) #([.,\'"\-\w\d\s]+) vs #([.,\'"\-\w\d\s]+): (\d+)-(\d+)')
+    cricket_regex = re.compile(r'\(([^)]+)\) #(.+) vs #(.+): ([\d/]+\s\([^)]+\))? ?- ([\d/]+\s\([^)]+\))?')
+    soccer_regex = re.compile(r'\(([^)]+)\) #(.+) vs #(.+): (\d+)-(\d+)\. (.+)')
+    regex = re.compile(r'\(([^)]+)\) #(.+) vs #(.+): (\d+)-(\d+)')
 
     matches = []
     for match in data:
