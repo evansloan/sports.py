@@ -82,9 +82,9 @@ def _parse_match_info(match, regex, soccer=False):
         'away_score': match.group(5)
     }
 
-    if match_info['home_score'] is None:
+    if match_info['home_score'] is None or match_info['home_score'] == '':
         match_info['home_score'] = '0'
-    if match_info['away_score'] is None:
+    if match_info['away_score'] is None or match_info['away_score'] == '':
         match_info['away_score'] = '0'
 
     if soccer:
@@ -106,8 +106,8 @@ def get_sport(sport):
     data = _request_xml(sport)
 
     cricket_regex = re.compile(r'\(([^)]+)\) #(.+) vs #(.+): ([\d/]+\s\([^)]+\))? ?- ([\d/]+\s\([^)]+\))?')
-    soccer_regex = re.compile(r'\(([^)]+)\) #(.+) vs #(.+): (\d+)-(\d+)\. (.+)')
-    regex = re.compile(r'\(([^)]+)\) #(.+) vs #(.+): (\d+)-(\d+)')
+    soccer_regex = re.compile(r'\(([^)]+)\) #(.+) vs #(.+): (\d*)-(\d*)\. (.+)')
+    regex = re.compile(r'\(([^)]+)\) #(.+) vs #(.+): (\d*)-(\d*)')
 
     matches = []
     for match in data:
