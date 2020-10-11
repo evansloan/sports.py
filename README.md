@@ -117,15 +117,15 @@ Properties available to MLB, NBA, NHL teams:
 - `playoff_app`: Total number of playoff appearances
 
 ```python
-pirates = sports.get_team_info(sports.BASEBALL, 'pirates')
+pirates = sports.get_team(sports.BASEBALL, 'pirates')
 print(pirates.pennants)
 
-penguins = sports.get_team_info(sports.HOCKEY, 'penguins')
+penguins = sports.get_team(sports.HOCKEY, 'penguins')
 print(penguins.points)
 
-steelers = sports.get_team_info(sports.FOOTBALL, 'steelers')
+steelers = sports.get_team(sports.FOOTBALL, 'steelers')
 print(steelers.super_bowls)
 
-sixers = sports.get_team_info(sports.BASKETBALL, '76ers')
+sixers = sports.get_team(sports.BASKETBALL, '76ers')
 print(sixers.playoff_app)
 ```
